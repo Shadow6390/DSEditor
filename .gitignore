@@ -1,0 +1,7 @@
+build/**
+dist/**
+nbproject/**
+build-impl.xml
+project.properties
+project.xml
+build.xml

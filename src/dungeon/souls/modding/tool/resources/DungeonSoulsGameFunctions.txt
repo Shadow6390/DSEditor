@@ -1,0 +1,6 @@
+printConsole(string)
+loggerWrite(string)
+getPlayerAttribute(string)
+setPlayerAttribute(string,value)
+distanceToNearestEnemy()
+enemyCount()

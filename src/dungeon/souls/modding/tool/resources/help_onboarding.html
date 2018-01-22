@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<title>Dungeon Souls Modding - Documentation</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-black.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
+.w3-sidebar {
+  z-index: 3;
+  width: 250px;
+  top: 43px;
+  bottom: 0;
+  height: inherit;
+}
+</style>
+<body>
+
+<!-- Navbar -->
+<div class="w3-top">
+  <div class="w3-bar w3-theme w3-top w3-left-align w3-large">
+    <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1" href="javascript:void(0)" onclick="w3_open()"><i class="fa fa-bars"></i></a>
+    <a href="./help.html" class="w3-bar-item w3-button w3-theme-l1">Dungeon Souls Editor</a>
+	<a href="./help_onboarding.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white w3-text-cyan">Quick Onboarding</a>
+    <a href="./help_modules.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Modules</a>
+    <a href="./help_items.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Items</a>
+	<a href="./help_sprites.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Sprites</a>
+	<a href="./help_functions.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Functions</a>
+	<a href="./help_steam_workshop.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Steam Workshop</a>
+    <a href="./help_contact.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Contact</a>
+  </div>
+</div>
+
+<!-- Sidebar -->
+<nav class="w3-sidebar w3-bar-block w3-collapse w3-large w3-theme-l5 w3-animate-left" id="mySidebar">
+  <a href="javascript:void(0)" onclick="w3_close()" class="w3-right w3-xlarge w3-padding-large w3-hover-black w3-hide-large" title="Close Menu">
+    <i class="fa fa-remove"></i>
+  </a>
+  <h4 class="w3-bar-item"><b>Reference</b></h4>
+  <a class="w3-bar-item w3-button w3-hover-black" href="./help_addGold.html">addGold</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="./help_distanceToNearestEnemy.html">distanceToNearestEnemy</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="./help_enemyCount.html">enemyCount</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="./help_playerAttribute.html">getPlayerAttribute</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="./help_loggerWrite.html">loggerWrite</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="./help_printConsole.html">printConsole</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="./help_playerAttribute.html">setPlayerAttribute</a>
+</nav>
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- Main content: shift it to the right by 250 pixels when the sidebar is visible -->
+<div class="w3-main" style="margin-left:250px">
+
+  <div class="w3-row w3-padding-64">
+    <div class="w3-twothird w3-container">
+      <h1 class="w3-text-teal">Premise</h1>
+      <p>The purpose of the Quick Onboarding is to explain the highest amount of concepts, with the highest detail, in the shortest possible manner. This is done by using similar concepts related to other programming languages (such as Java, C++, GML etc.). Therefore, we recommend reading the remainder of this page only if you have experience in coding, or you've done the tutorial about creating your first module.</p> 
+	  <p>In this page, syntax of the language will be explained, as well as any important concepts of the language.</p>
+    </div>
+  </div>
+
+  <div class="w3-row w3-padding-64">
+    <div class="w3-twothird w3-container">
+      <h1 class="w3-text-teal">Syntax</h1>
+      <p>The syntax of <b class="w3-text-blue">DSML</b> is similar to the syntax displayed in <b class="w3-text-blue">Java</b>, <b class="w3-text-blue">C++</b> and <b class="w3-text-blue">GML</b>. It shares similarities to <b class="w3-text-blue">GML</b> in regards to the fact that <b>type declaration is implicit</b>, which means variables do not require to have a type to be declared. In <b class="w3-text-blue">DSML</b>, variables are declared from the moment a value is first assigned to them. However, like <b class="w3-text-blue">GML</b>, keep in mind that accessing a variable that has not been declared (i.e. initialized with a value) will result in an error.</p>
+	  <p>The following example is a <b class="w3-text-light-green">valid variable declaration</b>:
+	  <div class="w3-codespan w3-text-gray">a=5;<br>
+	  sum=5+a;</div>
+	  <p>However, the following example will produce an <b class="w3-text-red">unknown variable error</b>:</p>
+	  <div class="w3-codespan w3-text-gray">...<br>
+	  sum=5+a;
+	  </div>
+	  <p>Similar to <b class="w3-text-blue">Java</b> and <b class="w3-text-blue">C++</b>, each statement ends with a semicolon (<b class="w3-text-blue">;</b>). A statement can be composed of mathematical operations or function calls, such as:</p>
+	  <div class="w3-codespan w3-text-gray">loremIpsum=generateLoremIpsum(); #Function call assignment</div>
+	  <br>
+	  <div class="w3-codespan w3-text-gray">a=5+2+8/3*8*2; #Mathematical assignment</div>
+	  <br>
+	  <div class="w3-codespan w3-text-gray">a=5+getPlayerAttribute("hp");</div>
+	  <p>On the topic of functions, currently, <b class="w3-text-blue">DSML function calls</b> only support passing either <b class="w3-text-blue">variables or values as arguments</b>, meaning that the following statement produces <b class="w3-text-red">statement produces an error</b>:</p>
+	  <div class="w3-codespan w3-text-gray">a=sum(getPlayerAttribute("resist"),getPlayerAttribute("defense"))</div>
+	  <p>But, the following <b class="w3-text-light-green">statement is valid</b>:
+	  <div class="w3-codespan w3-text-gray">b=getPlayerAttribute("resist");<br>c=getPlayerAttribute("defense");<br>a=sum(b,c);</div>
+	  <p>Finally, keep in mind that, similar to <b class="w3-text-blue">GML</b>, despite the fact that types are implicitly declared, type cast errors still apply, which means that the following statement produces an <b class="w3-text-red">unsupported addition error</b>:
+	  <div class="w3-codespan w3-text-gray">text="Hello World!";<br>value=5;<br>a=value+text;</div>
+    </div>
+  </div>
+  
+  <div class="w3-row w3-padding-64">
+    <div class="w3-twothird w3-container">
+      <h1 class="w3-text-teal">Mathematical Operators</h1>
+      <p><b class="w3-text-blue">DSML</b>'s mathematical operators can be applied to any given value, whether it's a real number, string, variable or result of a function call. The following table describes the <b class="w3-text-blue">available operators</b>, as well as their effects:</p>
+	  <table class="w3-table w3-striped w3-hoverable w3-responsive">
+		<tbody>
+		<tr>
+		<th class="w3-teal">
+			Operator
+		</th>
+		<th class="w3-teal">
+			Name
+		</th>
+		<th class="w3-teal">
+			Description
+		</th>
+		</tr>
+		<tr>
+			<td>+</td> <td>Addition</td> <td>In the mathematical expression <b class="w3-text-light-blue">a+b</b>, adds the value of b to a, generating a new value equivalent to a+b. Both values must be of the same type. <br>Can be applied to:
+			<ul>
+			<li>Numbers (2+2)</li>
+			<li>Strings ("2"+"2")</li>
+			</ul></td>
+		</tr>
+		<tr>
+			<td>-</td> <td>Subtraction</td> <td>In the mathematical expression <b class="w3-text-light-blue">a-b</b>, subtracts the value of b to a, generating a new value equivalent to a-b.</td>
+		</tr>
+		<tr>
+			<td>*</td> <td>Multiplication</td> <td>In the mathematical expression <b class="w3-text-light-blue">a*b</b>, multiplies the value of b to a, generating a new value equivalent to a*b.</td>
+		</tr>
+		<tr>
+			<td>/</td> <td>Division</td> <td>In the mathematical expression <b class="w3-text-light-blue">a/b</b>, divides a by the value of b , generating a new value equivalent to a/b. Divisions performed are always real divisions (and not integer division).</td>
+		</tr>
+		</tbody>
+		</table>
+    </div>
+  </div>
+  
+  <div class="w3-row w3-padding-64">
+    <div class="w3-twothird w3-container">
+      <h1 class="w3-text-teal">Statements</h1>
+      <p><b class="w3-text-blue">DSML</b> currently supports the following <b class="w3-text-blue">statements</b>:</p>
+	  <table class="w3-table w3-striped w3-hoverable w3-responsive">
+		<tbody>
+		<tr>
+		<th class="w3-teal">
+			Statement Name
+		</th>
+		<th class="w3-teal">
+			Statement Syntax
+		</th>
+		<th class="w3-teal">
+			Description
+		</th>
+		</tr>
+		<tr>
+			<td>If Statement</td> <td>if (condition) { expressions;}</td> <td>Executes a block of code in case the result of the <b class="w3-text-blue">conditional test</b> is <b class="w3-text-light-blue">true</b>.</td>
+		</tr>
+		<tr>
+			<td>Else If Statement</td> <td>if (condition) { ... } else if (conditionB) {...}</td> <td>If a preceed <b class="w3-text-blue">if</b> fails, another condition is checked. If the condition is true, the corresponding block of code is executed.</td>
+		</tr>
+		<tr>
+			<td>Else Statement </td> <td>if (condition) {...} else {...}</td> <td>If the preceeding <b class="w3-text-blue">if</b> fails, the block of code that follows <b class="w3-text-blue">else</b> is executed. Effectively the same as performing the following statement: <b class="w3-text-blue">if (condition!=1)</b> </td>
+		</tr>
+		</tbody>
+		</table>
+		<p>More statements are planned to be implemented in future versions of the modding language.</p>
+    </div>
+  </div>
+  
+  <div class="w3-row w3-padding-64">
+    <div class="w3-twothird w3-container">
+      <h1 class="w3-text-teal">Conditional Operators</h1>
+      <p><b class="w3-text-blue">DSML</b> supports the following <b class="w3-text-blue">conditional operators</b>:</p>
+	  <table class="w3-table w3-striped w3-hoverable w3-responsive">
+		<tbody>
+		<tr>
+		<th class="w3-teal">
+			Conditional Name
+		</th>
+		<th class="w3-teal">
+			Conditional Symbol
+		</th>
+		<th class="w3-teal">
+			Description
+		</th>
+		</tr>
+		<tr>
+			<td>Equal</td> <td>==</td> <td>In the comparison expression <b class="w3-text-light-blue">a==b</b>, condition is true if a is equal to b.</td>
+		</tr>
+		<tr>
+			<td>Not Equal</td> <td>!=</td> <td>In the comparison expression <b class="w3-text-light-blue">a!=b</b>, condition is true if a is not equal to b.</td>
+		</tr>
+		<tr>
+			<td>Greater Than</td> <td>&gt;</td> <td>In the comparison expression <b class="w3-text-light-blue">a&gt;b</b>, condition is true if a is greater than b.</td>
+		</tr>
+		<tr>
+			<td>Less Than</td> <td>&lt;</td> <td>In the comparison expression <b class="w3-text-light-blue">a&lt;b</b>, condition is true if a is less than b.</td>
+		</tr>
+		<tr>
+			<td>Greater Than Or Equal</td> <td>&gt;=</td> <td>In the comparison expression <b class="w3-text-light-blue">a&gt;=b</b>, condition is true if a is greater than or equal to b.</td>
+		</tr>
+		<tr>
+			<td>Less Than Or Equal</td> <td>&lt;=</td> <td>In the comparison expression <b class="w3-text-light-blue">a&lt;=b</b>, condition is true if a is less than or equal to b.</td>
+		</tr>
+		</tbody>
+		</table>
+    </div>
+  </div>
+  
+  <div class="w3-row w3-padding-64">
+    <div class="w3-twothird w3-container">
+      <h1 class="w3-text-teal">Values</h1>
+      <p><b class="w3-text-blue">DSML</b> currently supports the following <b class="w3-text-blue">constant values</b>:</p>
+	  <table class="w3-table w3-striped w3-hoverable w3-responsive">
+		<tbody>
+		<tr>
+		<th class="w3-teal">
+			Value Name
+		</th>
+		<th class="w3-teal">
+			Value Syntax
+		</th>
+		<th class="w3-teal">
+			Description
+		</th>
+		</tr>
+		<tr>
+			<td>Real Value</td> <td>Any Number <i class="w3-text-green">[regex: [0-9]+(\.[0-9]+)?]</i></td> <td>It's interpreted by the engine as a real number.</td>
+		</tr>
+		<tr>
+			<td>String</td> <td>Any text that starts and ends with quotes <i class="w3-text-green">"..."</i></td> <td>It's interpreted by the engine as text.</td>
+		</tr>
+		</tbody>
+		</table>
+		<p>More values are planned to be implemented in the future, such as booleans.</p>
+    </div>
+  </div>
+  
+  <footer id="myFooter">
+    <div class="w3-container w3-theme-l2 w3-padding-32">
+      <h4>Dungeon Souls Modding Documentation</h4>
+    </div>
+
+    <div class="w3-container w3-theme-l1">
+      <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a></p>
+    </div>
+  </footer>
+
+<!-- END MAIN -->
+</div>
+
+<script>
+// Get the Sidebar
+var mySidebar = document.getElementById("mySidebar");
+
+// Get the DIV with overlay effect
+var overlayBg = document.getElementById("myOverlay");
+
+// Toggle between showing and hiding the sidebar, and add overlay effect
+function w3_open() {
+    if (mySidebar.style.display === 'block') {
+        mySidebar.style.display = 'none';
+        overlayBg.style.display = "none";
+    } else {
+        mySidebar.style.display = 'block';
+        overlayBg.style.display = "block";
+    }
+}
+
+// Close the sidebar with the close button
+function w3_close() {
+    mySidebar.style.display = "none";
+    overlayBg.style.display = "none";
+}
+</script>
+
+</body>
+</html>

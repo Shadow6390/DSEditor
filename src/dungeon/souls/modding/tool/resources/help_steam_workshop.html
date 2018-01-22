@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<title>Dungeon Souls Modding - Documentation</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-black.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
+.w3-sidebar {
+  z-index: 3;
+  width: 250px;
+  top: 43px;
+  bottom: 0;
+  height: inherit;
+}
+</style>
+<body>
+
+<!-- Navbar -->
+<div class="w3-top">
+  <div class="w3-bar w3-theme w3-top w3-left-align w3-large">
+    <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1" href="javascript:void(0)" onclick="w3_open()"><i class="fa fa-bars"></i></a>
+    <a href="./help.html" class="w3-bar-item w3-button w3-theme-l1">Dungeon Souls Editor</a>
+	<a href="./help_onboarding.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Quick Onboarding</a>
+    <a href="./help_modules.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Modules</a>
+    <a href="./help_items.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Items</a>
+	<a href="./help_sprites.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Sprites</a>
+	<a href="./help_functions.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Functions</a>
+	<a href="#" class="w3-bar-item w3-button w3-hide-small w3-hover-white w3-text-cyan">Steam Workshop</a>
+    <a href="./help_contact.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Contact</a>
+  </div>
+</div>
+
+<!-- Sidebar -->
+<nav class="w3-sidebar w3-bar-block w3-collapse w3-large w3-theme-l5 w3-animate-left" id="mySidebar">
+  <a href="javascript:void(0)" onclick="w3_close()" class="w3-right w3-xlarge w3-padding-large w3-hover-black w3-hide-large" title="Close Menu">
+    <i class="fa fa-remove"></i>
+  </a>
+  <h4 class="w3-bar-item"><b>Reference</b></h4>
+  <a class="w3-bar-item w3-button w3-hover-black" href="./help_addGold.html">addGold</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="./help_distanceToNearestEnemy.html">distanceToNearestEnemy</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="./help_enemyCount.html">enemyCount</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="./help_playerAttribute.html">getPlayerAttribute</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="./help_loggerWrite.html">loggerWrite</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="./help_printConsole.html">printConsole</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="./help_playerAttribute.html">setPlayerAttribute</a>
+</nav>
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- Main content: shift it to the right by 250 pixels when the sidebar is visible -->
+<div class="w3-main" style="margin-left:250px">
+
+  <div class="w3-row w3-padding-64">
+    <div class="w3-twothird w3-container">
+      <h1 class="w3-text-teal">Steam Workshop</h1>
+      <p>The <b class="w3-text-blue">Dungeon Souls Modding Editor (DSEditor)</b> has support for compiling and publish your modules directly onto <b class="w3-text-blue">Steam Workshop</b>. Doing this for a project will automatically associated it with the Steam module and convert the <b class="w3-text-blue">Project Module</b> to a <b class="w3-text-blue">Steam Workshop Project</b>. This page provides a tutorial on how to compile and publish to Steam.</p> 
+	  <p><b>Note:</b> This tutorial assumes you already have a <b class="w3-text-blue">Project Module</b> created.</p>
+    </div>
+  </div>
+
+  <div class="w3-row">
+    <div class="w3-twothird w3-container">
+      <h1 class="w3-text-teal">Compiling and Publishing to Steam</h1>
+      <p><b class="w3-text-blue">DSEditor</b> has a Steam menu on the menu bar which can be used for all Steam related activites. Currently, the only option is to initialize the Steam SDK, which is disabled whenver the <b class="w3-text-blue">DSEditor</b> boots. It is only required to initialize Steam once, as it will persist until the editor is closed. To initialize Steam, go to <i class="w3-text-green">Steam>Initialize Steam (CTRL+SHIFT+S)</i>.</p>
+	  <p>If Steam is successfully initialized, the following output should appear in the editor's output window:</p>
+	  <div class="w3-codespan w3-text-black">Steam API initialized.</div>
+	  <p>If Steam is initialized again, the initialization call will be ignored, and the following warning will appear:</p>
+	  <div class="w3-codespan w3-text-black">Callback loop already initialized.</div>
+
+	  <p>After successfully initializing Steam, the option to <i class="w3-text-green">Compile>Compile and Release to Steam (CTRL+SHIFT+R)</i> will be enabled. Selecting this action will cause the standard compilation window to appear, which asks for the name of the <b class="w3-text-blue">.dsa</b> file to output, as well as the target directory.</p>
+	  
+	  <p>Upon specifying the output file and directory, the Steam Workshop information window will appear. This window will be automatically filled with information from previous uploads and it will be empty if it's the first time uploading the project to Steam. The window asks for the following information:</p>
+	  <ul>
+		<li><b>Steam Workshop Item Title -</b> The title of the item on Steam Workshop. Corresponds to the name of the module that will be shown on the Workshop.</li>
+		<li><b>Steam Workshop Description -</b> Corresponds to the description that will be shown on the module's Steam Workshop Page.</li>
+		<li><b>Steam Workshop Preview -</b> The path to an image file that will serve as the thumbnail of the module. Steam reccommends using either <b class="w3-text-blue">.png</b>, <b class="w3-text-blue">.gif</b> or <b class="w3-text-blue">.jpg</b></li>
+		<li><b>Change Log-</b> The change log that will be presented with the update (similar to how patch notes are launched). Steam keeps a history of all change logs. Keep in mind that the change log will only be uploaded if the contents of the module have been change (and will not be uploaded if only the Steam Workshop fields have been edited).</li>
+	  </ul>
+	  
+	  <p>Filling out the above information and submitting the module for release will cause the <b class="w3-text-blue">Project Module</b> to be converted to a <b class="w3-text-blue">Steam Workshop Project</b> internally, generating an entry in <b class="w3-text-blue">editor-steam.xml</b> file. Keep in mind that you can change the information above via Steam's client as well!
+	  <p>Uploading to Steam may also cause issues (in case the module is not valid, or, for the most part, you run out of space on your Steam Cloud). The editor will output a descriptive message specifying the cause of the error, which should help with troubleshooting.</p>
+    </div>
+  </div>
+
+
+  <footer id="myFooter">
+    <div class="w3-container w3-theme-l2 w3-padding-32">
+      <h4>Dungeon Souls Modding Documentation</h4>
+    </div>
+
+    <div class="w3-container w3-theme-l1">
+      <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a></p>
+    </div>
+  </footer>
+
+<!-- END MAIN -->
+</div>
+
+<script>
+// Get the Sidebar
+var mySidebar = document.getElementById("mySidebar");
+
+// Get the DIV with overlay effect
+var overlayBg = document.getElementById("myOverlay");
+
+// Toggle between showing and hiding the sidebar, and add overlay effect
+function w3_open() {
+    if (mySidebar.style.display === 'block') {
+        mySidebar.style.display = 'none';
+        overlayBg.style.display = "none";
+    } else {
+        mySidebar.style.display = 'block';
+        overlayBg.style.display = "block";
+    }
+}
+
+// Close the sidebar with the close button
+function w3_close() {
+    mySidebar.style.display = "none";
+    overlayBg.style.display = "none";
+}
+</script>
+
+</body>
+</html>

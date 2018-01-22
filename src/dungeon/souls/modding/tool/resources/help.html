@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<title>Dungeon Souls Modding - Documentation</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-black.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
+.w3-sidebar {
+  z-index: 3;
+  width: 250px;
+  top: 43px;
+  bottom: 0;
+  height: inherit;
+}
+</style>
+<body>
+
+<!-- Navbar -->
+<div class="w3-top">
+  <div class="w3-bar w3-theme w3-top w3-left-align w3-large">
+    <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1" href="javascript:void(0)" onclick="w3_open()"><i class="fa fa-bars"></i></a>
+    <a href="#" class="w3-bar-item w3-button w3-theme-l1">Dungeon Souls Editor</a>
+	<a href="./help_onboarding.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Quick Onboarding</a>
+    <a href="./help_modules.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Modules</a>
+    <a href="./help_items.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Items</a>
+	<a href="./help_sprites.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Sprites</a>
+	<a href="./help_functions.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Functions</a>
+	<a href="./help_steam_workshop.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Steam Workshop</a>
+    <a href="./help_contact.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Contact</a>
+  </div>
+</div>
+
+<!-- Sidebar -->
+<nav class="w3-sidebar w3-bar-block w3-collapse w3-large w3-theme-l5 w3-animate-left" id="mySidebar">
+  <a href="javascript:void(0)" onclick="w3_close()" class="w3-right w3-xlarge w3-padding-large w3-hover-black w3-hide-large" title="Close Menu">
+    <i class="fa fa-remove"></i>
+  </a>
+  <h4 class="w3-bar-item"><b>Reference</b></h4>
+  <a class="w3-bar-item w3-button w3-hover-black" href="./help_addGold.html">addGold</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="./help_distanceToNearestEnemy.html">distanceToNearestEnemy</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="./help_enemyCount.html">enemyCount</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="./help_playerAttribute.html">getPlayerAttribute</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="./help_loggerWrite.html">loggerWrite</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="./help_printConsole.html">printConsole</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="./help_playerAttribute.html">setPlayerAttribute</a>
+</nav>
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- Main content: shift it to the right by 250 pixels when the sidebar is visible -->
+<div class="w3-main" style="margin-left:250px">
+
+  <div class="w3-row w3-padding-64">
+    <div class="w3-twothird w3-container">
+      <h1 class="w3-text-teal">Getting Started with Dungeon Souls Modding</h1>
+	  <p><i class="w3-text-gray">Disclaimer: This documentation, the editor and modding support are still in alpha version, so expect more features to arrive (and please be a little patient with certain issues)!</i></p>
+      <p>Dungeon Souls is a rogue-like, dungeon crawler game made with Game Maker Studio 1.4. Chances are that, if you're reading this, you probably already know this fact. However, since it was developed with Game Maker Studio 1.4, there is an important concept to keep in mind: the base engine of Dungeon Souls is not meant to support modding completely. The default engine just supports media asset addition such as sprites and audio. As such, two programming languages have been created for this purpose.</p> 
+	  <p>The first, called <b class="w3-text-purple">Dungeon Souls Modding Language (DSML)</b> is a high-level language to code mods for Dungeon Souls and primarly the one you'll be using. The second, called <b class="w3-text-purple">Dungeon Souls Assembly Language (DSAL)</b> is a low-level language used by Dungeon Souls' game engine to enable modding support. The <b class="w3-text-blue">Dungeon Souls Modding Editor (DSEditor)</b> will convert from DSML to DSAL, so there is no need to actually change the DSAL, unless you know what you're doing. <b>It is strongly reccommended not to change any DSAL files</b>.</p>
+	  <p>Below is a quick tutorial to get you started with your first modding project! If you have programming experience, you may find the <a href="./help_onboarding.html">Quick Onboarding</a> page more suitable.</b>
+    </div>
+  </div>
+
+  <div class="w3-row">
+    <div class="w3-twothird w3-container">
+      <h1 class="w3-text-teal">Creating Your First Project</h1>
+      <p>When you first boot up DSEditor, your <i class="w3-text-orange">Projects</i> folder will be empty. Right clicking on this folder, or selecting <i class="w3-text-green">File>New Module (CTRL+N)</i>, will allow you to create a new Project Module. A Project Module is a project with the focus of developing a <b class="w3-text-blue">module</b>. A <b class="w3-text-blue">module</b> is a modification to the game. As part of the tutorial, perform the action of creating a new Project Module.</p>
+	  <p>After requesting to create a new Project Module, a window will appear containing the following elements to be filled:</p>
+	  <ul>
+		<li><b>Name (required) -</b> The name of the module, which will be shown in-game.</li>
+		<li><b>Version (required) -</b> The version of the module, which will be displayed to the user during game. The version, even though not checked for correct incrementation, is a useful information for the player to know if they have the latest version of your module, so make sure you change it everytime you make significant changes.</li>
+		<li><b>Description -</b> The description of the module that will be shown during game.</li>
+	  </ul>
+	  <b class="w3-text-blue"></b>
+	  <p>For the sake of this tutorial, we'll input the following information into each field:</p>
+	  <ul>
+		<li><b>Name (required) -</b> MyModule</li>
+		<li><b>Version (required) -</b> 1.0.0</li>
+		<li><b>Description -</b> My first module for Dungeon Souls!</li>
+	  </ul>
+	  <p>After the appropriate information is filled in, a new Project Module will appear under <i class="w3-text-orange">Projects</i> with the name specified previously. Opening the project's node will show all of the modding files associated to the project. In this case, only one file will be present: the <b class="w3-text-blue">Dungeon Souls Module (.dsmod)</b> file. This is the file where the module is declared, as well as any global variables (we'll soon talk about this concept) to the entire module. If you've been following along, the file should look like this:</p>
+		<div class="w3-code"><span class="w3-text-blue">define module </span>test<br>
+        {<br>
+		<span class="w3-text-purple">[NAME]</span>=<span class="w3-text-orange">"MyModule"</span>;<br>
+		<span class="w3-text-purple">[VERSION]</span>=<span class="w3-text-orange">"1.0.0"</span>;<br>
+		<span class="w3-text-purple">[DESCRIPTION]</span>=<span class="w3-text-orange">"My first module for Dungeon Souls!"</span>;<br>
+		<span class="w3-text-purple">[SPRITE_DIR]</span>=<span class="w3-text-orange">"Sprites"</span>;<br>
+		<br>
+		<i class="w3-text-gray">#Place code here...</i><br>
+        }</div>
+		<p>If you look at the code, you can see some familiar information. The name, version and description values inserted in the previous window are already set to their corresponding variables. In <b class="w3-text-purple">DSML</b>, certain types of code (often referred as <b class="w3-text-blue">definitions</b>) will have certain types of <b class="w3-text-orange">Game Variables</b>. These represent a special kind of variable, which set important variables for the <b class="w3-text-blue">definition</b> to work properly before any code is executed. <b class="w3-text-orange">Game Variables</b> have the following syntax:</p>
+		<div class="w3-codespan w3-text-orange">[&lt;NAME_OF_THE_GAME_VARIABLE&gt;]</div>
+		<p>Apart from the Game Variables specified previously, you can also check that there is one extra game variable called <b class="w3-text-orange">SPRITE_DIR</b>. This game variable specifies the directory where the graphical assets will be stored, so that the engine knows where to load the sprites from. Currently, this value cannot be changed (changing it will cause an error on Dungeon Souls), but is planned to be able to accept any value, as to customize sprite location.</p>
+		<p>Finally, there is one more element in the code, which is the <b class="w3-text-blue">comment</b>. Comments are pieces of text that are ignored by the compiler, but allow for easy documentation on the code. Use them whenever you need to explain an important concept or set a friendly reminder of what a particular piece of code does in your module. <b class="w3-text-blue">Comments</b> start with an <b class="w3-text-blue">#</b> and currently do not possess multiple lines.</p>
+    </div>
+  </div>
+
+  <div class="w3-row w3-padding-64">
+    <div class="w3-twothird w3-container">
+      <h1 class="w3-text-teal">Definition Layout</h1>
+      <p>Before we venture further on into our first module, it is important to layout the current <b class="w3-text-blue">definitions</b> of the <b class="w3-text-purple">DSML</b>. As stated previously, in the <b class="w3-text-purple">DSML</b>, a <b class="w3-text-blue">definition</b> corresponds to a declaration of a game asset. It tells the modding engine that it needs to define a certain game asset, based on what the <b class="w3-text-blue">definition</b> descibres in its code. In comparison to other languages, it is similar to <i class="w3-text-blue">classes</i>, sharing a few key concepts. In the navigator on the top of the page, you can find documentation for each of the definitions currently available to DSEditor.</p>
+	  <p>Currently, DSML supports the following definitions:</p>
+	  <ul>
+		<li><span class="w3-text-blue">Module</span> - represents the definition of a new module.</li>
+		<li><span class="w3-text-blue">Function</span> - represents the definition of a new function. Functions are global within a module, meaning that, regardless of the location of its declaration, every other definition can access the function. However, currently, modules cannot access other modules' functions.</li>
+		<li><span class="w3-text-blue">Item</span> - represents the definition of a new Dungeon Souls Item. This item has several properties, which we will see below, and can be spawned by chests, depending on its rarity. Currently, arcane forge items are not supported.</li>
+		<li><span class="w3-text-blue">Sprite</span> - represents the definition of a new sprite. Sprites are graphical assets that can be used in any definition that requires a graphical representaton, such as items.</li>
+	  </ul>
+	  
+	  <i>To be completed...</i>
+    </div>
+  </div>
+
+
+  <footer id="myFooter">
+    <div class="w3-container w3-theme-l2 w3-padding-32">
+      <h4>Dungeon Souls Modding Documentation</h4>
+    </div>
+
+    <div class="w3-container w3-theme-l1">
+      <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a></p>
+    </div>
+  </footer>
+
+<!-- END MAIN -->
+</div>
+
+<script>
+// Get the Sidebar
+var mySidebar = document.getElementById("mySidebar");
+
+// Get the DIV with overlay effect
+var overlayBg = document.getElementById("myOverlay");
+
+// Toggle between showing and hiding the sidebar, and add overlay effect
+function w3_open() {
+    if (mySidebar.style.display === 'block') {
+        mySidebar.style.display = 'none';
+        overlayBg.style.display = "none";
+    } else {
+        mySidebar.style.display = 'block';
+        overlayBg.style.display = "block";
+    }
+}
+
+// Close the sidebar with the close button
+function w3_close() {
+    mySidebar.style.display = "none";
+    overlayBg.style.display = "none";
+}
+</script>
+
+</body>
+</html>

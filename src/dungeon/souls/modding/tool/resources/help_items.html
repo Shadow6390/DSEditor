@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<title>Dungeon Souls Modding - Documentation</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-black.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
+.w3-sidebar {
+  z-index: 3;
+  width: 250px;
+  top: 43px;
+  bottom: 0;
+  height: inherit;
+}
+</style>
+<body>
+
+<!-- Navbar -->
+<div class="w3-top">
+  <div class="w3-bar w3-theme w3-top w3-left-align w3-large">
+    <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1" href="javascript:void(0)" onclick="w3_open()"><i class="fa fa-bars"></i></a>
+    <a href="./help.html" class="w3-bar-item w3-button w3-theme-l1">Dungeon Souls Editor</a>
+	<a href="./help_onboarding.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Quick Onboarding</a>
+    <a href="./help_modules.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Modules</a>
+    <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hover-white w3-text-cyan">Items</a>
+	<a href="./help_sprites.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Sprites</a>
+	<a href="./help_functions.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Functions</a>
+	<a href="./help_steam_workshop.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Steam Workshop</a>
+    <a href="./help_contact.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Contact</a>
+  </div>
+</div>
+
+<!-- Sidebar -->
+<nav class="w3-sidebar w3-bar-block w3-collapse w3-large w3-theme-l5 w3-animate-left" id="mySidebar">
+  <a href="javascript:void(0)" onclick="w3_close()" class="w3-right w3-xlarge w3-padding-large w3-hover-black w3-hide-large" title="Close Menu">
+    <i class="fa fa-remove"></i>
+  </a>
+  <h4 class="w3-bar-item"><b>Reference</b></h4>
+  <a class="w3-bar-item w3-button w3-hover-black" href="./help_addGold.html">addGold</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="./help_distanceToNearestEnemy.html">distanceToNearestEnemy</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="./help_enemyCount.html">enemyCount</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="./help_playerAttribute.html">getPlayerAttribute</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="./help_loggerWrite.html">loggerWrite</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="./help_printConsole.html">printConsole</a>
+  <a class="w3-bar-item w3-button w3-hover-black" href="./help_playerAttribute.html">setPlayerAttribute</a>
+</nav>
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- Main content: shift it to the right by 250 pixels when the sidebar is visible -->
+<div class="w3-main" style="margin-left:250px">
+
+  <div class="w3-row w3-padding-64">
+    <div class="w3-container">
+      <h1 class="w3-text-teal">Item Documentation</h1>
+      <p>An <b class="w3-text-blue">item</b> represents a Dungeon Souls item that is spawned in chests during runs. <b class="w3-text-blue">Items</b> can have different classes, effects, prices and rarities, depending on what you desire. Keep in mind that an <b class="w3-text-blue">item</b> will always have access to the current hero's data, such as health, damage, etc..</p> 
+	  
+		<h2 class = "w3-text-teal">Game Variables</h2>
+		<p>An item definition contains the following <b class="w3-text-orange">Game Variables</b>:
+		<table class="w3-table w3-striped w3-hoverable w3-responsive">
+		<tbody>
+		<tr>
+		<th class="w3-teal">
+			Name
+		</th>
+		<th class="w3-teal">
+			Description
+		</th>
+		<th class="w3-teal">
+			Required
+		</th>
+		</tr>
+		<tr>
+			<td>NAME</td> <td>The name of the item shown in-game.</td> <td>True</td>
+		</tr>
+		<tr>
+			<td>MAX_STACKS</td> <td>The maximum amount of stacks that the item can have.</td> <td>True</td>
+		</tr>
+		<tr>
+			<td>DESCRIPTION</td> <td>The description of the item shown in-game.</td> <td>False</td>
+		</tr>
+		<tr>
+			<td>SPRITE</td> <td>The <b class="w3-text-blue">sprite definition</b> to assign to this item.</td> <td>True</td>
+		</tr>
+		<tr>
+			<td>TYPE</td> <td>The type of the item, which specifies the behaviour it will have. Can be one of the following:
+			<ul>
+				<li><b class="w3-text-orange">"item_passive"</b></li>
+				<li><b class="w3-text-orange">"item_active"</b></li>
+				<li><b class="w3-text-orange">"item_consumable"</b></li>
+			</ul></td> <td>True</td>
+		</tr>
+		<tr>
+			<td>RARITY</td> <td>The rarity of the item, which determines on which chests it is allowed to be spawned. Can be one of the following:
+			<ul>
+				<li><b class="w3-text-orange">"item_common"</b></li>
+				<li><b class="w3-text-orange">"item_uncommon"</b></li>
+				<li><b class="w3-text-orange">"item_rare"</b></li>
+				<li><b class="w3-text-orange">"item_legendary"</b></li>
+				<li><b class="w3-text-orange">"item_cursed"</b></li>
+			</ul></td> <td>True</td>
+		</tr>
+		<tr>
+			<td>PRICE</td> <td>The base price of the item.</td> <td>True</td>
+		</tr>
+		<tr>
+			<td>ON_PICKUP_FUNCTION</td> <td>The <b class="w3-text-blue">function</b> to call when the item is picked up.</td> <td>False</td>
+		</tr>
+		<tr>
+			<td>ON_ACTIVE_FUNCTION</td> <td>The <b class="w3-text-blue">function</b> to call when the item is activated, when rarity is <b class="w3-text-orange">"item_active"</b> or <b class="w3-text-orange">"item_consumable"</b>.</td> <td>False</td>
+		</tr>
+		<tr>
+			<td>ON_STEP_FUNCTION</td> <td>The <b class="w3-text-blue">function</b> to call at each step of the game, when rarity is <b class="w3-text-orange">"item_passive"</b>.</td> <td>False</td>
+		</tr>
+		</tbody>
+		</table>
+	  
+	  <h2 class = "w3-text-teal">Location and Extension</h2>
+	  <p>The <b class="w3-text-blue">item</b> code is stored in the <b class="w3-text-blue">Dungeon Souls Item (.dsitem)</b> file.</p>
+	  
+	  <h2 class = "w3-text-teal">Description Format</h2>
+	  <p>In Dungeon Souls, <b class="w3-text-blue">items</b> can have their description change depending on the amount of stacks the hero currently has. As such, the description of the <b class="w3-text-blue">item</b> definition has a special format to support this case.</p>
+	  <p>Anytime you want to specify another description, depending on the stack count, you should use the following format:</p>
+	  
+	  <div class="w3-codespan w3-text-black">{first description here|second description here|...}</div>
+	  
+	  <p>Depending if your description has a linear dependency on the stack count of the item, you can also use the following format to account for modularity in a easier manner:</p>
+	  
+	  <div class="w3-codespan w3-text-black">{&lt;base_value&gt;|&lt;+|-&gt;&lt;increment_value&gt;}</div>
+	  
+	  <p>Let's take a look at examples of these two formats. For the first format, let's say I have an item with the following description defined:</p>
+	  
+	  <div class="w3-codespan w3-text-black"><span class="w3-text-purple">[DESCRIPTION]</span>=<span class="w3-text-orange">"{Increases your drop rate by a third|Increases your drop rate by a billion|You are the luckiest person ever.}"</span>;</div>
+	  
+	  <p>With the previous description format, if its the first time the player is viewing the item description, then its description will be <span class="w3-text-orange">"Increases your drop rate by a third"</span>. However, if the player already had a stack count of two of this item, the description shown when picking the item the third time would be <span class="w3-text-orange">"You are the luckiest person ever."</span>.</p>
+	  
+	  <p>Similarly, the second format also completes the information, but this time around it is possible to define the description's behaviour, regardless of the max stacks defined. For example, let's consider the following description:</p>
+	  
+	  <div class="w3-codespan w3-text-black"><span class="w3-text-purple">[DESCRIPTION]</span>=<span class="w3-text-orange">"Increases your max health by {2|+8} and reduces your defense by {2|+2}"</span>;</div>
+	  
+	  <p>What this means is that, at first, the description will be completed to <span class="w3-text-orange">"Increases your max health by 2 and reduces your defense by 2"</span>. The second time the player picks the item, its description will be <span class="w3-text-orange">"Increases your max health by 10 and reduces your defense by 4"</span>. This happens because, for example, <span class="w3-text-blue">{2|+8}</span> states to the engine that it should start with the value 2, then, for each stack count, add 8 to that value and complete the description.</p>
+	  
+	  <h2 class = "w3-text-teal">Example</h2>
+	  <p>Here follows an example of the definition of an <b class="w3-text-blue">item</b>:</p>
+	  <div class="w3-code"><span class="w3-text-blue">define item </span>item_Red_Book<br>
+        {<br>
+		<span class="w3-text-purple">[NAME]</span>=<span class="w3-text-orange">"Red Book"</span>;<br>
+		<span class="w3-text-purple">[MAX_STACKS]</span>=3;<br>
+		<span class="w3-text-purple">[DESCRIPTION]</span>=<span class="w3-text-orange">"+{4|+4} magical damage."</span>;<br>
+		<span class="w3-text-purple">[SPRITE]</span>=spr_Red_Book;<br>
+		<span class="w3-text-purple">[TYPE]</span>=<span class="w3-text-orange">"item_passive"</span>;<br>
+		<span class="w3-text-purple">[PRICE]</span>=50;<br>
+		<span class="w3-text-purple">[RARITY]</span>=<span class="w3-text-orange">"item_common"</span>;<br>
+		<i class="w3-text-gray">#[ON_PICKUP_FUNCTION];</i><br>
+		<i class="w3-text-gray">#[ON_ACTIVE_FUNCTION];</i><br>
+		<span class="w3-text-purple">[ON_PICKUP_FUNCTION]</span>=redBookPickup();<br>
+		<br>
+		<i class="w3-text-gray">#Place code here...</i><br>
+        }</div>
+    </div>
+  </div>
+
+  <footer id="myFooter">
+    <div class="w3-container w3-theme-l2 w3-padding-32">
+      <h4>Dungeon Souls Modding Documentation</h4>
+    </div>
+
+    <div class="w3-container w3-theme-l1">
+      <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a></p>
+    </div>
+  </footer>
+
+<!-- END MAIN -->
+</div>
+
+<script>
+// Get the Sidebar
+var mySidebar = document.getElementById("mySidebar");
+
+// Get the DIV with overlay effect
+var overlayBg = document.getElementById("myOverlay");
+
+// Toggle between showing and hiding the sidebar, and add overlay effect
+function w3_open() {
+    if (mySidebar.style.display === 'block') {
+        mySidebar.style.display = 'none';
+        overlayBg.style.display = "none";
+    } else {
+        mySidebar.style.display = 'block';
+        overlayBg.style.display = "block";
+    }
+}
+
+// Close the sidebar with the close button
+function w3_close() {
+    mySidebar.style.display = "none";
+    overlayBg.style.display = "none";
+}
+</script>
+
+</body>
+</html>
