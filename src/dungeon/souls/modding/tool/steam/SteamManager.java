@@ -7,17 +7,9 @@ package dungeon.souls.modding.tool.steam;
 
 import com.codedisaster.steamworks.SteamAPI;
 import com.codedisaster.steamworks.SteamException;
-import com.codedisaster.steamworks.SteamID;
-import com.codedisaster.steamworks.SteamPublishedFileID;
-import com.codedisaster.steamworks.SteamRemoteStorage;
-import com.codedisaster.steamworks.SteamResult;
-import com.codedisaster.steamworks.SteamUGC;
-import com.codedisaster.steamworks.SteamUGCCallback;
-import com.codedisaster.steamworks.SteamUGCDetails;
-import com.codedisaster.steamworks.SteamUGCQuery;
 import dungeon.souls.modding.tool.ui.EditorMain;
-import static dungeon.souls.modding.tool.ui.EditorMain.out;
 import java.awt.Desktop;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -27,6 +19,10 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.Timer;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -68,6 +64,16 @@ public class SteamManager
      * Whether the callback loop was initizlied or not.
      */
     private boolean callbackLoopInitialized;
+    
+    /**
+     * Icon to display when a steam workshop project is open.
+     */
+    private ImageIcon openIcon;
+    
+    /**
+     * Icon to display when a steam workshop project is closed.
+     */
+    private ImageIcon closedIcon;
     
     /**
      * The file where the editor's Steam data is kept.
@@ -114,6 +120,48 @@ public class SteamManager
     public boolean addSteamListener(SteamListener listener)
     {
         return listeners.add(listener);
+    }
+    
+    /**
+     * Returns the icon for open steam projects.
+     * @return The image icon for open projects.
+     */
+    public ImageIcon getOpenProjectIcon()
+    {
+        if (openIcon==null)
+        {
+            try
+            {
+                openIcon=new ImageIcon(ImageIO.read(EditorMain.class.getClassLoader().getResourceAsStream("dungeon/souls/modding/tool/resources/spr_Steam_Project_Open.png"))
+                .getScaledInstance(16, 16, Image.SCALE_DEFAULT));
+            }
+            catch (IOException ex)
+            {
+                Logger.getLogger(SteamManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return openIcon;
+    }
+    
+    /**
+     * Returns the icon for closed steam projects.
+     * @return The image icon for closed projects.
+     */
+    public ImageIcon getClosedProjectIcon()
+    {
+        if (closedIcon==null)
+        {
+            try
+            {
+                closedIcon=new ImageIcon(ImageIO.read(EditorMain.class.getClassLoader().getResourceAsStream("dungeon/souls/modding/tool/resources/spr_Steam_Project_Closed.png"))
+                .getScaledInstance(16, 16, Image.SCALE_DEFAULT));
+            }
+            catch (IOException ex)
+            {
+                Logger.getLogger(SteamManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return closedIcon;
     }
     
     /**

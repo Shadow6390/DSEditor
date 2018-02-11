@@ -6,15 +6,24 @@
 package dungeon.souls.modding.tool.model.module;
 
 import dungeon.souls.modding.tool.model.compiling.ModdingFile;
+import dungeon.souls.modding.tool.model.generic.ImageFile;
 import dungeon.souls.modding.tool.model.item.ItemCodeTemplate;
 import dungeon.souls.modding.tool.model.sprite.SpriteCodeTemplate;
 import dungeon.souls.modding.tool.reflection.FileEditable;
+import dungeon.souls.modding.tool.ui.EditorMain;
 import dungeon.souls.modding.tool.utils.Utilities;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import javax.swing.JComponent;
+import javax.swing.JTextPane;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 
 /**
  * Represents a module project.
@@ -33,6 +42,12 @@ public class ModuleProject
     private List<ModdingFile> projectFiles;
     
     /**
+     * This module's list of unrelated files. These can be any files that have
+     * no special meaning to the modding context, such as image files and audio.
+     */
+    private List<FileEditable> otherFiles;
+    
+    /**
      * The module of this project.
      */
     private ModdingFile module;
@@ -45,7 +60,8 @@ public class ModuleProject
     //For factory methods only.
     private ModuleProject()
     {
-        projectFiles = new ArrayList();
+        projectFiles = new ArrayList<>();
+        otherFiles = new ArrayList<>();
     }
     
     /**
@@ -59,7 +75,8 @@ public class ModuleProject
         //this.module=new Module(projectName,moduleVersion);
         this.module = new ModdingFile(projectName+".dsmod",template);
         this.name=projectName;
-        projectFiles = new ArrayList();
+        projectFiles = new ArrayList<>();
+        otherFiles = new ArrayList<>();
         this.directory=new File(baseDirectory.getAbsolutePath()+File.separator+name);
         initDirectory();
     }
@@ -96,6 +113,33 @@ public class ModuleProject
     }
     
     /**
+     * Loads the images contained in the specified files onto the base directory.
+     * @param base The base directory to copy the images to.
+     * @param images An array with the image files to copy.
+     * @return The image files that have been successfully added to the project.
+     */
+    public List<FileEditable> loadImages(File base,File[] images)
+    {
+        List<FileEditable> result = new LinkedList<>();
+        for (File element:images)
+        {
+            try
+            {
+                Path path = Files.copy(element.toPath(), new File(base.getAbsolutePath()+File.separator+element.getName()).toPath(), REPLACE_EXISTING);
+                FileEditable file = new ImageFile(path.toFile());
+                otherFiles.add(file);
+                result.add(file);
+                EditorMain.out.println("Added image '"+element.getName()+"' to the project's sprite repository (/Sprites).");
+            }
+            catch (IOException ex)
+            {
+                EditorMain.out.println("Error adding image '"+element.getName()+"': "+ex.getMessage());
+            }
+        }
+        return result;
+    }
+    
+    /**
      * Returns the module file of this project.
      * @return (ModdingFile) The module file of this project.
      */
@@ -107,13 +151,43 @@ public class ModuleProject
     /**
      * Loads all the files of this project module into the node.
      * @param baseNode (DefaultMutableTreeNode) The base node to add the files onto.
+     * @param model The tree model to add to. If null, nodes will be added to the baseNode.
      */
-    public void loadFilesAsNodes(DefaultMutableTreeNode baseNode)
+    public void loadFilesAsNodes(DefaultMutableTreeNode baseNode,DefaultTreeModel model)
     {
-        baseNode.add(new DefaultMutableTreeNode(module));
+        int count=0;
+        if (model==null)
+        {
+            baseNode.add(new DefaultMutableTreeNode(module));
+        }
+        else
+        {
+            model.insertNodeInto(new DefaultMutableTreeNode(module), baseNode, count);
+            count++;
+        }
         for (ModdingFile file:projectFiles)
         {
-            baseNode.add(new DefaultMutableTreeNode(file));
+            if (model==null)
+            {
+                baseNode.add(new DefaultMutableTreeNode(file));
+            }
+            else
+            {
+                model.insertNodeInto(new DefaultMutableTreeNode(file), baseNode, count);
+                count++;
+            }
+        }
+        for (FileEditable file:otherFiles)
+        {
+            if (model==null)
+            {
+                baseNode.add(new DefaultMutableTreeNode(file));
+            }
+            else
+            {
+                model.insertNodeInto(new DefaultMutableTreeNode(file), baseNode, count);
+                count++;
+            }
         }
     }
     
@@ -180,7 +254,7 @@ public class ModuleProject
         if (extension!=null)
         {
             //Should be changed to use visitor pattern.
-            if (extension.equals("dsmod")) //Module
+            if (ExtensionManager.getInstance().isExtensionModuleFile(extension)) //Module
             {
                 if (module==null)
                 {
@@ -191,17 +265,17 @@ public class ModuleProject
                     System.out.println("Two modding files found! Exception should be taken care of.");
                 }
             }
-            else if (extension.equals("dsitem")) //Item
+            else if (ExtensionManager.getInstance().isExtensionItemFile(extension)) //Item
             {
                 projectFiles.add(ModdingFile.Factory.loadModdingFile(file,ModdingFile.FileType.ITEM));
             }
-            else if (extension.equals("dsspr")) //Sprite asset
+            else if (ExtensionManager.getInstance().isExtensionSpriteFile(extension)) //Sprite asset
             {
                 projectFiles.add(ModdingFile.Factory.loadModdingFile(file,ModdingFile.FileType.SPRITE));
             }
-            else
+            else if (ExtensionManager.getInstance().isExtensionImage(extension))
             {
-                //System.out.println("Unrecognized file... This exception should be taken care of!");
+                otherFiles.add(new ImageFile(file));
             }
         }
     }
@@ -254,10 +328,14 @@ public class ModuleProject
     public String mergeCodeFiles()
     {
         String result = "";
-        result+=module.contentToTextPane().getText();
+        result+=((JTextPane)module.contentToComponent()).getText();
         for (ModdingFile file:projectFiles)
         {
-            result+="\n"+file.contentToTextPane().getText();
+            JComponent component = file.contentToComponent();
+            if (component instanceof JTextPane)
+            {
+                result+="\n"+((JTextPane)component).getText();
+            }
         }
         return result;
     }

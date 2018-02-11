@@ -119,7 +119,7 @@ public class ItemCodeTemplate extends BaseCodeTemplate
         {
             base+="\t"+line+";\n";
         }
-        base+="\n\n\t#Place function declarations here...\n";
+        base+="\n\n\t//Place function declarations here...\n";
         base+="}";
         return base;
     }

@@ -43,6 +43,11 @@ public class BaseGrammarBuildListener extends BaseGrammarBaseListener
      * The defined variables.
      */
     private List<String> variables;
+    
+    /**
+     * The list of game variables detected.
+     */
+    private List<GameVariableAssignment> gameVariableList;
 
     /**
      * The amount of module definitions.
@@ -81,7 +86,35 @@ public class BaseGrammarBuildListener extends BaseGrammarBaseListener
         this.semanticErrors = 0;
         items = new LinkedList();
         sprites = new LinkedList();
-        functions=new LinkedList();
+        functions = new LinkedList();
+        gameVariableList = new LinkedList();
+    }
+    
+    
+    /**
+     * @return the gameVariableList
+     */
+    public List<GameVariableAssignment> getGameVariableList()
+    {
+        return gameVariableList;
+    }
+    
+    /**
+     * Returns a list of all functions assembled.
+     * @return The assembled functions.
+     */
+    public List<FunctionAssembly> getFunctions()
+    {
+        return functions;
+    }
+    
+    /**
+     * Returns a list of declared variables.
+     * @return The variables declared.
+     */
+    public List<String> getVariableList()
+    {
+        return variables;
     }
     
     /**
@@ -214,6 +247,16 @@ public class BaseGrammarBuildListener extends BaseGrammarBaseListener
             {
                 items.add(info);
             }
+        }
+    }
+    
+    @Override 
+    public void exitAssignment(@NotNull BaseGrammarParser.AssignmentContext ctx) 
+    {
+        GameVariableAssignment variable = GameVariableAssignment.parseFrom(ctx);
+        if (variable!=null)
+        {
+            getGameVariableList().add(variable);
         }
     }
 

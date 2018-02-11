@@ -56,7 +56,7 @@ public final class ObjectToTextConverter
                         }
                         else
                         {
-                            result+="#["+value+"]\n"; 
+                            result+="//["+value+"]\n"; 
                         }
                     } catch (IllegalArgumentException | SecurityException | IllegalAccessException ex) {
                         Logger.getLogger(ObjectToTextConverter.class.getName()).log(Level.WARNING, null, ex);

@@ -5,6 +5,7 @@
  */
 package dungeon.souls.modding.tool.model.compiling.language;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.antlr.v4.runtime.misc.Interval;
@@ -49,7 +50,16 @@ public class CompilationErrorMessage
      */
     public List<String> getSuggestionList()
     {
-        return Arrays.asList(suggestions);
+        List<String> result;
+        if (suggestions!=null)
+        {
+            result = Arrays.asList(suggestions);
+        }
+        else
+        {
+            result = new ArrayList<>();
+        }
+        return result;
     }
     
     /**

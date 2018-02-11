@@ -19,20 +19,6 @@ public interface BaseGrammarVisitor<T> extends ParseTreeVisitor<T> {
 	T visitAssetModule(@NotNull BaseGrammarParser.AssetModuleContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link BaseGrammarParser#expression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitExpression(@NotNull BaseGrammarParser.ExpressionContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link BaseGrammarParser#comparison}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitComparison(@NotNull BaseGrammarParser.ComparisonContext ctx);
-
-	/**
 	 * Visit a parse tree produced by {@link BaseGrammarParser#assetItem}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -45,6 +31,76 @@ public interface BaseGrammarVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitFunction_call(@NotNull BaseGrammarParser.Function_callContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link BaseGrammarParser#function_parameter}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFunction_parameter(@NotNull BaseGrammarParser.Function_parameterContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link BaseGrammarParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStatement(@NotNull BaseGrammarParser.StatementContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link BaseGrammarParser#free_expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFree_expression(@NotNull BaseGrammarParser.Free_expressionContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link BaseGrammarParser#term}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTerm(@NotNull BaseGrammarParser.TermContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link BaseGrammarParser#while_statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitWhile_statement(@NotNull BaseGrammarParser.While_statementContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link BaseGrammarParser#assetSprite}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAssetSprite(@NotNull BaseGrammarParser.AssetSpriteContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link BaseGrammarParser#factor}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFactor(@NotNull BaseGrammarParser.FactorContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link BaseGrammarParser#value}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitValue(@NotNull BaseGrammarParser.ValueContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link BaseGrammarParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExpression(@NotNull BaseGrammarParser.ExpressionContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link BaseGrammarParser#comparison}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitComparison(@NotNull BaseGrammarParser.ComparisonContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link BaseGrammarParser#functionArgumentDeclaration}.
@@ -82,11 +138,25 @@ public interface BaseGrammarVisitor<T> extends ParseTreeVisitor<T> {
 	T visitExplicit_code(@NotNull BaseGrammarParser.Explicit_codeContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link BaseGrammarParser#function_parameter}.
+	 * Visit a parse tree produced by {@link BaseGrammarParser#for_statement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitFunction_parameter(@NotNull BaseGrammarParser.Function_parameterContext ctx);
+	T visitFor_statement(@NotNull BaseGrammarParser.For_statementContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link BaseGrammarParser#condition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCondition(@NotNull BaseGrammarParser.ConditionContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link BaseGrammarParser#conditional_operator}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitConditional_operator(@NotNull BaseGrammarParser.Conditional_operatorContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link BaseGrammarParser#math_value}.
@@ -110,13 +180,6 @@ public interface BaseGrammarVisitor<T> extends ParseTreeVisitor<T> {
 	T visitBlock_code(@NotNull BaseGrammarParser.Block_codeContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link BaseGrammarParser#statement}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitStatement(@NotNull BaseGrammarParser.StatementContext ctx);
-
-	/**
 	 * Visit a parse tree produced by {@link BaseGrammarParser#variable}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -131,32 +194,11 @@ public interface BaseGrammarVisitor<T> extends ParseTreeVisitor<T> {
 	T visitIf_statement(@NotNull BaseGrammarParser.If_statementContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link BaseGrammarParser#term}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitTerm(@NotNull BaseGrammarParser.TermContext ctx);
-
-	/**
 	 * Visit a parse tree produced by {@link BaseGrammarParser#comment}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitComment(@NotNull BaseGrammarParser.CommentContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link BaseGrammarParser#assetSprite}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAssetSprite(@NotNull BaseGrammarParser.AssetSpriteContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link BaseGrammarParser#factor}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitFactor(@NotNull BaseGrammarParser.FactorContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link BaseGrammarParser#asset}.
@@ -171,11 +213,4 @@ public interface BaseGrammarVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitAssetFunction(@NotNull BaseGrammarParser.AssetFunctionContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link BaseGrammarParser#value}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitValue(@NotNull BaseGrammarParser.ValueContext ctx);
 }

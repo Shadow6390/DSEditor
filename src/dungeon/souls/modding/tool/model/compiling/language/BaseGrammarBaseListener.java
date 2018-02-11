@@ -30,32 +30,6 @@ public class BaseGrammarBaseListener implements BaseGrammarListener {
 	 * <p/>
 	 * The default implementation does nothing.
 	 */
-	@Override public void enterExpression(@NotNull BaseGrammarParser.ExpressionContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation does nothing.
-	 */
-	@Override public void exitExpression(@NotNull BaseGrammarParser.ExpressionContext ctx) { }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation does nothing.
-	 */
-	@Override public void enterComparison(@NotNull BaseGrammarParser.ComparisonContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation does nothing.
-	 */
-	@Override public void exitComparison(@NotNull BaseGrammarParser.ComparisonContext ctx) { }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation does nothing.
-	 */
 	@Override public void enterAssetItem(@NotNull BaseGrammarParser.AssetItemContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -76,6 +50,136 @@ public class BaseGrammarBaseListener implements BaseGrammarListener {
 	 * The default implementation does nothing.
 	 */
 	@Override public void exitFunction_call(@NotNull BaseGrammarParser.Function_callContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void enterFunction_parameter(@NotNull BaseGrammarParser.Function_parameterContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void exitFunction_parameter(@NotNull BaseGrammarParser.Function_parameterContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void enterStatement(@NotNull BaseGrammarParser.StatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void exitStatement(@NotNull BaseGrammarParser.StatementContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void enterFree_expression(@NotNull BaseGrammarParser.Free_expressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void exitFree_expression(@NotNull BaseGrammarParser.Free_expressionContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void enterTerm(@NotNull BaseGrammarParser.TermContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void exitTerm(@NotNull BaseGrammarParser.TermContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void enterWhile_statement(@NotNull BaseGrammarParser.While_statementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void exitWhile_statement(@NotNull BaseGrammarParser.While_statementContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void enterAssetSprite(@NotNull BaseGrammarParser.AssetSpriteContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void exitAssetSprite(@NotNull BaseGrammarParser.AssetSpriteContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void enterFactor(@NotNull BaseGrammarParser.FactorContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void exitFactor(@NotNull BaseGrammarParser.FactorContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void enterValue(@NotNull BaseGrammarParser.ValueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void exitValue(@NotNull BaseGrammarParser.ValueContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void enterExpression(@NotNull BaseGrammarParser.ExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void exitExpression(@NotNull BaseGrammarParser.ExpressionContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void enterComparison(@NotNull BaseGrammarParser.ComparisonContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void exitComparison(@NotNull BaseGrammarParser.ComparisonContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
@@ -147,13 +251,39 @@ public class BaseGrammarBaseListener implements BaseGrammarListener {
 	 * <p/>
 	 * The default implementation does nothing.
 	 */
-	@Override public void enterFunction_parameter(@NotNull BaseGrammarParser.Function_parameterContext ctx) { }
+	@Override public void enterFor_statement(@NotNull BaseGrammarParser.For_statementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 * <p/>
 	 * The default implementation does nothing.
 	 */
-	@Override public void exitFunction_parameter(@NotNull BaseGrammarParser.Function_parameterContext ctx) { }
+	@Override public void exitFor_statement(@NotNull BaseGrammarParser.For_statementContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void enterCondition(@NotNull BaseGrammarParser.ConditionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void exitCondition(@NotNull BaseGrammarParser.ConditionContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void enterConditional_operator(@NotNull BaseGrammarParser.Conditional_operatorContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void exitConditional_operator(@NotNull BaseGrammarParser.Conditional_operatorContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
@@ -199,19 +329,6 @@ public class BaseGrammarBaseListener implements BaseGrammarListener {
 	 * <p/>
 	 * The default implementation does nothing.
 	 */
-	@Override public void enterStatement(@NotNull BaseGrammarParser.StatementContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation does nothing.
-	 */
-	@Override public void exitStatement(@NotNull BaseGrammarParser.StatementContext ctx) { }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation does nothing.
-	 */
 	@Override public void enterVariable(@NotNull BaseGrammarParser.VariableContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -238,19 +355,6 @@ public class BaseGrammarBaseListener implements BaseGrammarListener {
 	 * <p/>
 	 * The default implementation does nothing.
 	 */
-	@Override public void enterTerm(@NotNull BaseGrammarParser.TermContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation does nothing.
-	 */
-	@Override public void exitTerm(@NotNull BaseGrammarParser.TermContext ctx) { }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation does nothing.
-	 */
 	@Override public void enterComment(@NotNull BaseGrammarParser.CommentContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -258,32 +362,6 @@ public class BaseGrammarBaseListener implements BaseGrammarListener {
 	 * The default implementation does nothing.
 	 */
 	@Override public void exitComment(@NotNull BaseGrammarParser.CommentContext ctx) { }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation does nothing.
-	 */
-	@Override public void enterAssetSprite(@NotNull BaseGrammarParser.AssetSpriteContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation does nothing.
-	 */
-	@Override public void exitAssetSprite(@NotNull BaseGrammarParser.AssetSpriteContext ctx) { }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation does nothing.
-	 */
-	@Override public void enterFactor(@NotNull BaseGrammarParser.FactorContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation does nothing.
-	 */
-	@Override public void exitFactor(@NotNull BaseGrammarParser.FactorContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
@@ -310,19 +388,6 @@ public class BaseGrammarBaseListener implements BaseGrammarListener {
 	 * The default implementation does nothing.
 	 */
 	@Override public void exitAssetFunction(@NotNull BaseGrammarParser.AssetFunctionContext ctx) { }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation does nothing.
-	 */
-	@Override public void enterValue(@NotNull BaseGrammarParser.ValueContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation does nothing.
-	 */
-	@Override public void exitValue(@NotNull BaseGrammarParser.ValueContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

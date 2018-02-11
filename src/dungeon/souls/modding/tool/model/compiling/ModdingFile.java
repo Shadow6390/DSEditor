@@ -19,6 +19,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+import javax.swing.JComponent;
 import javax.swing.JTextPane;
 import javax.swing.undo.UndoManager;
 
@@ -121,7 +122,6 @@ public class ModdingFile implements FileEditable
     {
         if (file!=null)
         {
-            System.out.println(file.getAbsolutePath());
             file.delete();
         }
     }
@@ -130,6 +130,7 @@ public class ModdingFile implements FileEditable
      * Returns the filename of this module.
      * @return (String) The filename of the module.
      */
+    @Override
     public String getFileName()
     {
         
@@ -148,7 +149,7 @@ public class ModdingFile implements FileEditable
     }
 
     @Override
-    public JTextPane contentToTextPane()
+    public JComponent contentToComponent()
     {
         if (codePane==null)
         {
@@ -169,17 +170,21 @@ public class ModdingFile implements FileEditable
     {
         File storedFile = new File(parentDirectory.getAbsolutePath()+File.separator+file.getName());
         BufferedWriter writer = new BufferedWriter(new FileWriter(storedFile,false));
-        for (String line:contentToTextPane().getText().split("\n"))
+        JComponent component = contentToComponent();
+        if (component instanceof JTextPane)
         {
-            writer.append(line);
-            writer.newLine();
+            for (String line:((JTextPane)component).getText().split("\n"))
+            {
+                writer.append(line);
+                writer.newLine();
+            }
+            recentlySaved=true;
+            writer.close();
+            saveListeners.stream().forEach((elem) ->
+            {
+                elem.onSave(this);
+            });
         }
-        recentlySaved=true;
-        writer.close();
-        saveListeners.stream().forEach((elem) ->
-        {
-            elem.onSave(this);
-        });
     }
     
     /**
@@ -210,7 +215,11 @@ public class ModdingFile implements FileEditable
                     result.template=new ItemCodeTemplate();
                     break;
             }
-            result.contentToTextPane().setText(Utilities.fileAsString(location));
+            JComponent component=result.contentToComponent();
+            if (component instanceof JTextPane)
+            {
+                ((JTextPane)component).setText(Utilities.fileAsString(location));
+            }
             result.recentlySaved=true;
             return result;
         }

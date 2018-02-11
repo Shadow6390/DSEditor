@@ -69,7 +69,7 @@ public class ModuleCodeTemplate extends BaseCodeTemplate
         {
             base+="\t"+line+";\n";
         }
-        base+="\n\n\t#Place code here...\n";
+        base+="\n\n\t//Place code here...\n";
         base+="}";
         return base;
     }

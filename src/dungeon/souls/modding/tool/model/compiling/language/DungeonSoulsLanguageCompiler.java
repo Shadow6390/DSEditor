@@ -8,12 +8,21 @@ package dungeon.souls.modding.tool.model.compiling.language;
 import dungeon.souls.modding.tool.model.compiling.language.assembly.CodeBlockAssembly;
 import dungeon.souls.modding.tool.model.compiling.language.assembly.MemoryAssignmentAssembly;
 import dungeon.souls.modding.tool.model.module.ModuleProject;
+import dungeon.souls.modding.tool.steam.SteamManager;
 import dungeon.souls.modding.tool.ui.EditorMain;
 import dungeon.souls.modding.tool.utils.Utilities;
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import org.antlr.v4.runtime.CharStream;
@@ -28,11 +37,87 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 public class DungeonSoulsLanguageCompiler
 {
     /**
+     * The error listener for the last compilation process.
+     */
+    private BaseGrammarErrorListener errorListener;
+    
+    /**
+     * The build listener for the last compilation process.
+     */
+    public BaseGrammarBuildListener buildListener;
+    
+    /**
+     * Whether it should output the compilation process or not.
+     */
+    private boolean verbose;
+    
+    /**
+     * The location of dungeon souls' content.
+     */
+    private final String DUNGEON_SOULS_FOLDER="DungeonSouls";
+    
+    /**
      * Creates an instance of {@ DungeonSoulsLanguageCompiler}.
      */
     public DungeonSoulsLanguageCompiler()
     {
-        
+        verbose=true;
+    }
+    
+    public void compileAndRun(ModuleProject project) throws IOException
+    {
+        String targetDir = "";
+        String osname = System.getProperty("os.name").toLowerCase();
+        if (osname.contains("win"))
+        {
+            targetDir = Paths.get(System.getenv("LOCALAPPDATA"),DUNGEON_SOULS_FOLDER).toString();
+        }
+        else if (osname.contains("mac"))
+        {
+            targetDir = Paths.get(System.getProperty("user.home"),"Library","Application",DUNGEON_SOULS_FOLDER).toString();
+        }
+        else if (osname.contains("nix") || osname.contains("nux") || osname.contains("aix"))
+        {
+            targetDir = Paths.get(System.getProperty("user.home"),System.getProperty("user.name"),".config",DUNGEON_SOULS_FOLDER).toString();
+        }
+        File outputDir = new File(targetDir);
+        if (!targetDir.equals("") && outputDir.exists()) //Should change to: If we haven't found a valid directory, we prompt the user.
+        {
+            outputDir = Paths.get(outputDir.getAbsolutePath(),"Mods").toFile();
+            if (!outputDir.exists()) //Create "Mods" folder if it doesn't exist.
+            {
+                outputDir.mkdir();
+            }
+            compileProjectFolder(project,Paths.get(outputDir.getAbsolutePath(),project.getName()+".dsa").toFile());
+            File modStart = new File(targetDir+File.separator+"MOD_START.ses");
+            addModuleEntry(outputDir,project);
+            if (!modStart.exists())
+            {
+                modStart.createNewFile();
+            }
+            try
+            {
+                Desktop.getDesktop().browse(new URI("steam://run/"+SteamManager.STEAM_APP_ID));
+            }
+            catch (URISyntaxException ex)
+            {
+                throw new IOException("Module instaled but failed to run Dungeon Souls due to '"+ex.getMessage()+"'");
+            }
+        }
+        else
+        {
+            throw new IOException("Dungeon Souls' save location folder was not found.");
+        }
+    }
+    
+    /**
+     * Sets whether the compiler should output messages to the editor's output
+     * log.
+     * @param value Output messages to editor if true.
+     */
+    public void setVerbose(boolean value)
+    {
+        verbose=value;
     }
     
     /**
@@ -99,9 +184,6 @@ public class DungeonSoulsLanguageCompiler
         String temp = compileString(text, true);
         String moduleName = output.getName();
         moduleName = moduleName.substring(0,moduleName.lastIndexOf('.'))+".dsa";
-        /*FileWriter writer = new FileWriter(dsaOutput);
-        writer.write(temp, 0, temp.length());
-        writer.close();*/
         
         //Zip assembly and everything else in the directory.
         ZipOutputStream out = new ZipOutputStream(new FileOutputStream(output));
@@ -147,44 +229,101 @@ public class DungeonSoulsLanguageCompiler
 
         BaseGrammarParser parser = new BaseGrammarParser(tokens);
         parser.removeErrorListeners();
-        BaseGrammarErrorListener listener = new BaseGrammarErrorListener();
-        parser.addErrorListener(listener);
+        errorListener = new BaseGrammarErrorListener();
+        parser.addErrorListener(errorListener);
         BaseGrammarParser.StartContext context = parser.start();
         //Listener approach:
         ParseTreeWalker walker=new ParseTreeWalker();
         MemoryAssignmentAssembly.resetMemories();
         CodeBlockAssembly.resetCodeBlockCount();
-        BaseGrammarBuildListener buildListener = new BaseGrammarBuildListener(parser);
+        
+        buildListener = new BaseGrammarBuildListener(parser);
         walker.walk(buildListener, context);
+        
         String finalMessage="";
-        if (listener.size()>0)
+        if (verbose)
         {
-            for (int i=0;i<listener.size();i++)
+            if (errorListener.size()>0)
             {
-                EditorMain.out.println(listener.getMessage(i));
-            }
-            if (!buildCode)
-            {
-                finalMessage="File compilation-check failed";
+                for (int i=0;i<errorListener.size();i++)
+                {
+                    EditorMain.out.println(errorListener.getMessage(i));
+                }
+                if (!buildCode)
+                {
+                    finalMessage="File compilation-check failed";
+                }
+                else
+                {
+                    finalMessage = "Project build failed.";
+                }
             }
             else
             {
-                finalMessage = "Project build failed.";
+                if (!buildCode)
+                {
+                    finalMessage="File compilation-check successful and return OK.";
+                }
+                else
+                {
+                    finalMessage="Project compiled.";
+                }
             }
+            EditorMain.out.println(finalMessage);
         }
-        else
-        {
-            if (!buildCode)
-            {
-                finalMessage="File compilation-check successful and return OK.";
-            }
-            else
-            {
-                finalMessage="Project compiled.";
-            }
-        }
-        EditorMain.out.println(finalMessage);
         return (buildCode) ? buildListener.getCompilationAssemblyCode() : "";
+    }
+    
+    public List<String> getCompiledVariables()
+    {
+        return (buildListener==null) ? null : buildListener.getVariableList();
+    }
+    
+    /**
+     * Returns a list of error messages from the compilation process.
+     * @return The list of messages. Can be empty.
+     */
+    public List<CompilationErrorMessage> getErrorMessages()
+    {
+        List<CompilationErrorMessage> result = new LinkedList<>();
+        if (errorListener!=null)
+        {
+            result = errorListener.getMessageList();
+        }
+        return result;
+    }
+    
+    /**
+     * Adds a module entry to the mods_location.config file.
+     * @param outputDir The output directory where the file resides at.
+     * @param mp The project module.
+     * @throws IOException 
+     */
+    private void addModuleEntry(File outputDir,ModuleProject mp) throws IOException
+    {
+        File configFile = new File(outputDir.getAbsolutePath()+File.separator+"mods_location.config");
+        String entry = mp.getName()+"/"+mp.getName()+".dsa";
+        if (!modsLocationContains(configFile,entry))
+        {
+            Utilities.writeOrAppendTo(configFile, entry);
+        }
+    }
+    
+    /**
+     * Checks whether the mods_location.config file contains the module entry or not.
+     * @param configFile The file to check for.
+     * @param entry The entry to check.
+     * @return True if it does contain.
+     */
+    private boolean modsLocationContains(File configFile,String entry) throws IOException
+    {
+        boolean result = false;
+        if (configFile.exists() && configFile.isFile())
+        {
+            List<String> lines = Files.readAllLines(configFile.toPath());
+            result = lines.contains(entry);
+        }
+        return result;
     }
     
     /**

@@ -24,7 +24,13 @@ public final class AssemblyCodeLibrary
     
     public static final String ASSEMBLY_ASSIGN_REGISTRY_VARIABLE="modding_set_registry_with_variable";
     
+    public static final String ASSEMBLY_ASSIGN_REGISTRY_CONDITION="modding_set_registry_with_condition";
+    
     public static final String ASSEMBLY_CODE_BLOCK="$b";
+    
+    public static final String ASSEMBLY_FOR_LOOP="modding_for_loop";
+    
+    public static final String ASSEMBLY_WHILE_LOOP="modding_while_loop";
     
     public static final String ASSEMBLY_CODE_BLOCK_START="block start "+ASSEMBLY_CODE_BLOCK;
     

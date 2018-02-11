@@ -49,7 +49,7 @@ public class SpriteCodeTemplate extends BaseCodeTemplate
         {
             base+="\t"+line+";\n";
         }
-        base+="\n\n\t#Sprites can have multiple [SUBIMAGE] fields.\n#The order of the sprite's animation is defined by the order of appearance of each [SUBIMAGE]\n";
+        base+="\n\n\t//Sprites can have multiple [SUBIMAGE] fields.\n//The order of the sprite's animation is defined by the order of appearance of each [SUBIMAGE]\n";
         base+="}";
         return base;
     }

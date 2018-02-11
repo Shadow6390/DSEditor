@@ -6,11 +6,13 @@
 package dungeon.souls.modding.tool.utils;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -121,6 +123,29 @@ public final class Utilities
                 }
             }
         }
+    }
+    
+    /**
+     * Writes or appends a line to a given file, depending on whether the
+     * file has been created or not.
+     * @param file The file to write or append to.
+     * @param line The line to insert.
+     * @throws IOException 
+     */
+    public static void writeOrAppendTo(File file,String line) throws IOException
+    {
+        BufferedWriter writer;
+        if (file.exists())
+        {
+            writer = new BufferedWriter(new FileWriter(file,true));
+        }
+        else
+        {
+            writer = new BufferedWriter(new FileWriter(file));
+        }
+        writer.write(line);
+        writer.newLine();
+        writer.close();
     }
     
     /**

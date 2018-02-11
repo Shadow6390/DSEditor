@@ -5,6 +5,7 @@
  */
 package dungeon.souls.modding.tool.ui;
 
+import dungeon.souls.modding.tool.model.compiling.language.CompilationErrorMessage;
 import javax.swing.text.StyledDocument;
 
 /**
@@ -19,4 +20,16 @@ public interface CodeSyntaxHighlighter
      * @param text (String) The modified text.
      */
     public void onTextChanged(StyledDocument document,String text);
+    
+    /**
+     * Makes this highlighter signal any errors that have occurred.
+     * @param document The styled document to change.
+     * @param message The compilation error message.
+     */
+    public void signalError(StyledDocument document,CompilationErrorMessage message);
+    
+    /**
+     * Clears any errors that may have been signaled.
+     */
+    public void clearErrors();
 }

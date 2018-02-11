@@ -8,7 +8,7 @@ package dungeon.souls.modding.tool.reflection;
 import dungeon.souls.modding.tool.model.module.SaveListener;
 import java.io.File;
 import java.io.IOException;
-import javax.swing.JTextPane;
+import javax.swing.JComponent;
 
 /**
  * Represents an entity that can be edited in a textfile-like method.
@@ -17,11 +17,16 @@ import javax.swing.JTextPane;
 public interface FileEditable
 {
     /**
+     * Returns the name of this editable file.
+     * @return The name of the file.
+     */
+    public String getFileName();
+    /**
      * Converts the contents of the class into a text pane, containing data
      * that can be written into a textfile.
      * @return (JTextPane) The text pane with the information of the class.
      */
-    public JTextPane contentToTextPane();
+    public JComponent contentToComponent();
     
     /**
      * Saves this class into a file.

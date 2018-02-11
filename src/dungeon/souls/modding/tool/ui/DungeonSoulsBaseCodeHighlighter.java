@@ -6,6 +6,7 @@
 package dungeon.souls.modding.tool.ui;
 
 import dungeon.souls.modding.tool.model.compiling.CodeTemplate;
+import dungeon.souls.modding.tool.model.compiling.language.CompilationErrorMessage;
 import dungeon.souls.modding.tool.reflection.Property;
 import java.awt.Color;
 import java.lang.reflect.Field;
@@ -29,6 +30,13 @@ public class DungeonSoulsBaseCodeHighlighter implements CodeSyntaxHighlighter
     private final AttributeSet complexOperators = context.addAttribute(context.getEmptySet(), StyleConstants.Foreground, new Color(0,0,255));
     private final AttributeSet comment = context.addAttribute(context.addAttribute(context.getEmptySet(), StyleConstants.Foreground, new Color(67,104,60)),StyleConstants.Italic,true);
     private final AttributeSet string = context.addAttribute(context.getEmptySet(), StyleConstants.Foreground, new Color(226, 149, 40));
+    
+    private final AttributeSet compilationError = context.addAttribute(context.addAttribute(context.getEmptySet(), StyleConstants.Foreground, new Color(223,0,0)),StyleConstants.Underline,true);
+    
+    /**
+     * A list that contains any compilation error messages, for further highlighting.
+     */
+    private List<CompilationErrorMessage> messageList;
     
     /**
      * The pattern for strings.
@@ -58,6 +66,7 @@ public class DungeonSoulsBaseCodeHighlighter implements CodeSyntaxHighlighter
     public DungeonSoulsBaseCodeHighlighter()
     {
         initPatterns();
+        messageList = new LinkedList<>();
     }
     
     /**
@@ -68,8 +77,21 @@ public class DungeonSoulsBaseCodeHighlighter implements CodeSyntaxHighlighter
     {
         this.template=template;
         initPatterns();
+        messageList = new LinkedList<>();
     }
 
+    @Override
+    public void clearErrors()
+    {
+        messageList.clear();
+    }
+    
+    @Override
+    public void signalError(StyledDocument document,CompilationErrorMessage message)
+    {
+        messageList.add(message);
+    }
+    
     @Override
     public void onTextChanged(StyledDocument document, String text)
     {
@@ -97,6 +119,13 @@ public class DungeonSoulsBaseCodeHighlighter implements CodeSyntaxHighlighter
             // Change the color of recognized tokens
             document.setCharacterAttributes(matcher.start(), matcher.end() - matcher.start(), comment, false);
         }
+        
+        for (CompilationErrorMessage message:messageList)
+        {
+            int start = message.getInterval().a;
+            int length = message.getInterval().b-start;
+            document.setCharacterAttributes(start, length, compilationError, false);
+        }
     }
 
     /**
@@ -105,8 +134,8 @@ public class DungeonSoulsBaseCodeHighlighter implements CodeSyntaxHighlighter
     private void initPatterns()
     {
         stringPattern = Pattern.compile("\"[^\"]*\"");
-        commentPattern = Pattern.compile("#.*(\n|\n\r|$)");
-        complexOperatorsPattern = buildWordBasedPattern(new String[]{"if","else","define","function","module","item","sprite","functionInput","functionOutput"});
+        commentPattern = Pattern.compile("//.*(\n|\n\r|$)");
+        complexOperatorsPattern = buildWordBasedPattern(new String[]{"if","else","define","function","module","item","sprite","functionInput","functionOutput","for","while"});
         List<String> attributes = new LinkedList();
         attributes.addAll(getPropertiesFrom(getClass()));
         if (template!=null)

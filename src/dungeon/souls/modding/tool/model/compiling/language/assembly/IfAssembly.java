@@ -24,9 +24,9 @@ public class IfAssembly implements AssemblyCode
     private CodeBlockAssembly elseCode;
     
     /**
-     * The comparison conditions.
+     * The conditions.
      */
-    private ComparisonAssembly comparison;
+    private ConditionAssembly condition;
     
     public IfAssembly()
     {
@@ -51,9 +51,9 @@ public class IfAssembly implements AssemblyCode
     /**
      * @param comparison the comparison to set
      */
-    public void setComparison(ComparisonAssembly comparison)
+    public void setCondition(ConditionAssembly comparison)
     {
-        this.comparison = comparison;
+        this.condition = comparison;
     }
     
     @Override
@@ -64,8 +64,8 @@ public class IfAssembly implements AssemblyCode
         {
             extra=" "+elseCode.toString();
         }
-        String result = comparison.toAssembly()+"\n";
-        result+=AssemblyCodeLibrary.ASSEMBLY_IF_THEN_ELSE_THEN+" "+comparison.getComparisonResultRegistry()+" "+ifCode.toString()+extra+"\n";
+        String result = condition.toAssembly()+"\n";
+        result+=AssemblyCodeLibrary.ASSEMBLY_IF_THEN_ELSE_THEN+" "+condition.getConditionResultRegistry()+" "+ifCode.toString()+extra+"\n";
         result+=ifCode.toAssembly();
         if (elseCode!=null)
         {

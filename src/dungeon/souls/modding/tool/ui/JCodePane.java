@@ -5,8 +5,9 @@
  */
 package dungeon.souls.modding.tool.ui;
 
-import dungeon.souls.modding.tool.model.module.SaveListener;
-import dungeon.souls.modding.tool.utils.DocumentFilterHouse;
+import dungeon.souls.modding.tool.model.compiling.language.CompilationErrorMessage;
+import dungeon.souls.modding.tool.model.compiling.language.DungeonSoulsLanguageCompiler;
+import dungeon.souls.modding.tool.model.compiling.language.GameVariableAssignment;
 import dungeon.souls.modding.tool.utils.DocumentTextUndoManager;
 import dungeon.souls.modding.tool.utils.Utilities;
 import java.awt.Color;
@@ -20,6 +21,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractAction;
@@ -32,12 +34,15 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.Caret;
 import javax.swing.text.Document;
 import javax.swing.text.DocumentFilter;
-import javax.swing.text.PlainDocument;
+import javax.swing.text.Element;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
 import javax.swing.text.StyledDocument;
@@ -60,6 +65,16 @@ public class JCodePane extends JTextPane
     private AutoCompleteWindow suggestionWindow;
     
     private DocumentTextUndoManager realManager;
+    
+    /**
+     * The compilation handler of this code pane.
+     */
+    private CompilationHandler cHandler;
+    
+    /**
+     * The compiled game variables.
+     */
+    private List<GameVariableAssignment> gameVariables;
         
     /**
      * Creates a new JCodePane.
@@ -81,26 +96,7 @@ public class JCodePane extends JTextPane
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                try 
-                {
-                    String functionName = JOptionPane.showInputDialog(JCodePane.this,"Function Name:","Function Definition",JOptionPane.QUESTION_MESSAGE);
-                    if (functionName.equals(""))
-                    {
-                        functionName = "myfunction";
-                    }
-                    String template = "\tdefine function "+functionName+"\n"
-                            + "\t{\n"
-                            + "\t\tfunctionInput arg0;"
-                            + "\n\t\tfunctionInput arg1;"
-                            + "\n\t\tfunctionOutput result;"
-                            + "\n\t}";
-                    
-                    int position = getCaretPosition();
-                    getDocument().insertString(position, template, null);
-                } catch (BadLocationException ex) {
-                    Logger.getLogger(JCodePane.class.getName()).log(Level.SEVERE, null, ex);
-                    EditorMain.out.println(ex.getMessage());
-                }
+                createFunction();
             }
         });
         popupMenu = new JPopupMenu();
@@ -116,6 +112,8 @@ public class JCodePane extends JTextPane
                 }
             }
         });
+        cHandler = new CompilationHandler(getStyledDocument());
+        getDocument().addDocumentListener(cHandler);
     }
     
     /**
@@ -159,13 +157,32 @@ public class JCodePane extends JTextPane
         suggestionWindow.addAutoCompleteListener(new AutoCompleteImpl());
     }
     
-    @Override
-    public boolean equals(Object other)
+    /**
+     * Creates a function declaratio at this JCodePane's caret position.
+     */
+    public void createFunction()
     {
-        System.out.println("Oh weeee.");
-        return super.equals(other);
+        try 
+        {
+            String functionName = JOptionPane.showInputDialog(JCodePane.this,"Function Name:","Function Definition",JOptionPane.QUESTION_MESSAGE);
+            if (functionName.equals(""))
+            {
+                functionName = "myfunction";
+            }
+            String template = "\tdefine function "+functionName+"\n"
+                    + "\t{\n"
+                    + "\t\tfunctionInput arg0;"
+                    + "\n\t\tfunctionInput arg1;"
+                    + "\n\t\tfunctionOutput result;"
+                    + "\n\t}";
+
+            int position = getCaretPosition();
+            getDocument().insertString(position, template, null);
+        } catch (BadLocationException ex) {
+            Logger.getLogger(JCodePane.class.getName()).log(Level.SEVERE, null, ex);
+            EditorMain.out.println(ex.getMessage());
+        }
     }
-    
     /**
      * Loads stored suggestions to the auto-complete window.
      * @param suggestionWindow 
@@ -203,6 +220,45 @@ public class JCodePane extends JTextPane
                     Point d = getLocationOnScreen();
                     p.translate(d.x,d.y+16);
                     suggestionWindow.show(true, p,getCaret());
+                    final Document document = getDocument();
+                    final Caret caret = getCaret();
+                    //Trigger text change to display suggestions.
+                    suggestionWindow.handleTextChange(new DocumentEvent()
+                    {
+                        private Document doc = document;
+                        
+                        private Caret c = caret;
+                        
+                        @Override
+                        public int getOffset()
+                        {
+                            return c.getDot();
+                        }
+
+                        @Override
+                        public int getLength()
+                        {
+                            return 0;
+                        }
+
+                        @Override
+                        public Document getDocument()
+                        {
+                            return doc;
+                        }
+
+                        @Override
+                        public DocumentEvent.EventType getType()
+                        {
+                            return DocumentEvent.EventType.INSERT;
+                        }
+
+                        @Override
+                        public DocumentEvent.ElementChange getChange(Element elem)
+                        {
+                            return null;
+                        }
+                    });
                 }
             }
         });
@@ -241,6 +297,53 @@ public class JCodePane extends JTextPane
                 }
             }
         });
+        
+        getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,0),"enterTabbed");
+        getActionMap().put("enterTabbed",new AbstractAction() {
+
+            @Override
+            public void actionPerformed(ActionEvent e)
+            {
+                try
+                {
+                    String text = getDocument().getText(0, getDocument().getLength());
+                    int dot = getCaret().getDot()-1;
+                    String tabs = "";
+                    for (int i=dot;i>=0;i--)
+                    {
+                        if (text.charAt(i)=='\t')
+                        {
+                            tabs+="\t";
+                        }
+                        else if (text.charAt(i)=='\n')
+                        {
+                            i=-1;
+                        }
+                    }
+                    getDocument().insertString(getCaret().getDot(), "\n"+tabs, null);
+                }
+                catch (BadLocationException ex)
+                {
+                    Logger.getLogger(JCodePane.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+    }
+
+    /**
+     * @return the gameVariables
+     */
+    public List<GameVariableAssignment> getGameVariables()
+    {
+        return gameVariables;
+    }
+
+    /**
+     * @return the cHandler
+     */
+    public CompilationHandler getCompilationHandler()
+    {
+        return cHandler;
     }
     
     private class AutoCompleteImpl implements AutoCompleteListener
@@ -263,6 +366,83 @@ public class JCodePane extends JTextPane
             }
         }
         
+    }
+    
+    /**
+     * A class that handles compiling the code in this pane and signaling errors.
+     */
+    protected class CompilationHandler implements DocumentListener
+    {
+        /**
+         * The styled document to signal.
+         */
+        private StyledDocument document;
+        
+        /**
+         * Creates a Compilation Handler with the specified parameters.
+         * @param doc The styled document to signal.
+         */
+        public CompilationHandler(StyledDocument doc)
+        {
+            this.document=doc;
+        }
+        
+        @Override
+        public void insertUpdate(DocumentEvent e)
+        {
+            syntaxCheck();
+        }
+
+        @Override
+        public void removeUpdate(DocumentEvent e)
+        {
+            syntaxCheck();
+        }
+
+        @Override
+        public void changedUpdate(DocumentEvent e)
+        {
+            //syntaxCheck();
+        }
+
+        public void syntaxCheck()
+        {
+            if (EditorMain.out!=null) //Check if window is initialized.
+            {
+                try
+                {
+                    String text = getText();
+                    if (text!=null)
+                    {
+                        DungeonSoulsLanguageCompiler compiler = new DungeonSoulsLanguageCompiler();
+                        compiler.setVerbose(false);
+                        compiler.compileString(text,false);
+                        codeSyntax.clearErrors();
+                        List<CompilationErrorMessage> list = compiler.getErrorMessages();
+                        if (!list.isEmpty())
+                        {
+                            String tooltipText="<html><body>Errors found:<br><ul>";
+                            for (CompilationErrorMessage elem:list)
+                            {
+                                codeSyntax.signalError(document,elem);
+                                tooltipText+="<li>"+elem.toString()+"</li>";
+                            }
+                            tooltipText+="</ul></body></html>";
+                            setToolTipText(tooltipText);
+                        }
+                        else
+                        {
+                            setToolTipText("");
+                        }
+                        gameVariables = compiler.buildListener.getGameVariableList();
+                    }
+                }
+                catch (Exception e)
+                {
+                    //EditorMain.out.println(e.getMessage());
+                }
+            }
+        }
     }
     
     /**

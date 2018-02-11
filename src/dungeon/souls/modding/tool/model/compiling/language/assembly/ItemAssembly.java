@@ -69,7 +69,7 @@ public class ItemAssembly implements AssemblyCode
         List<BaseGrammarParser.AssignmentContext> assignments = result.getAssigments(ctx);
         result.variableName=ctx.VARIABLE().getText();
         result.parseItemVariables(assignments);
-        result.codeBlock=result.parseCodeBlock(ctx.block_code());
+        result.codeBlock=AssemblyUtilities.parseCodeBlock(ctx.block_code());
         return result;
     }
 
@@ -118,138 +118,7 @@ public class ItemAssembly implements AssemblyCode
         return result;
     }
     
-    private CodeBlockAssembly parseCodeBlock(Block_codeContext context)
-    {
-        CodeBlockAssembly result = new CodeBlockAssembly();
-        AssemblyCode temp;
-        for (ParseTree tree:context.children)
-        {
-            temp=null;
-            if (tree.getClass().equals(StatementContext.class))
-            {
-                temp=parseStatement((StatementContext)tree);
-            }
-            else if (tree.getClass().equals(Block_codeContext.class))
-            {
-                temp=parseCodeBlock((Block_codeContext)tree);
-            }
-            if (temp!=null) //If we have found a valid code statement.
-            {
-                if (temp.getClass().equals(AssemblyCodeCollection.class))
-                {
-                    AssemblyCodeCollection collection = (AssemblyCodeCollection)temp;
-                    for (Object element:collection)
-                    {
-                        result.addAssemblyCode((AssemblyCode)element);
-                    }
-                }
-                else
-                {
-                    result.addAssemblyCode(temp);
-                }
-            }
-        }
-        return result;
-    }
     
-    private AssemblyCode parseStatement(StatementContext context)
-    {
-        AssemblyCode result = null;
-        if (context.expression()!=null)
-        {
-            result = parseExpression(context.expression());
-        }
-        else if (context.if_statement()!=null)
-        {
-            result = parseIfStatement(context.if_statement());
-        }
-        return result;
-    }
-    
-    private AssemblyCode parseIfStatement(If_statementContext context)
-    {
-        AssemblyCodeCollection result = new AssemblyCodeCollection();
-        int limit = context.explicit_code().size();
-        IfAssembly assembly = null;
-        if (!context.ELSE().isEmpty())
-        {
-            limit--; //Last code will be other ifs..
-        }
-        for (int i=0;i<limit;i++)
-        {
-            assembly = new IfAssembly();
-            assembly.setComparison(ComparisonAssembly.parseFrom(context.comparison(i)));
-            CodeBlockAssembly ifCode;
-            AssemblyCode temp = parseExplicitCode(context.explicit_code(i));
-            if (temp.getClass().equals(CodeBlockAssembly.class))
-            {
-                ifCode=(CodeBlockAssembly)temp;
-            }
-            else
-            {
-                ifCode = new CodeBlockAssembly();
-                ifCode.addAssemblyCode(temp);
-            }
-            assembly.setIfCode(ifCode);
-            result.add(assembly);
-        }
-        if (context.ELSE(0)!=null)
-        {
-            if (assembly!=null)
-            {
-                AssemblyCode elseCode = parseExplicitCode(context.explicit_code(limit));
-                if (elseCode instanceof AssemblyCodeCollection)
-                {
-                    AssemblyCodeCollection collection = (AssemblyCodeCollection)elseCode;
-                    CodeBlockAssembly block = new CodeBlockAssembly();
-                    for (Object element:collection)
-                    {
-                        block.addAssemblyCode((AssemblyCode) element);
-                    }
-                    assembly.setElseCode(block);
-                }
-                else
-                {
-                    CodeBlockAssembly block = new CodeBlockAssembly();
-                    block.addAssemblyCode(elseCode);
-                    assembly.setElseCode(block);
-                }
-            }
-        }
-        return result;
-    }
-    
-    private AssemblyCode parseExplicitCode(Explicit_codeContext context)
-    {
-        AssemblyCode result = null;
-        if (context!=null)
-        {
-            if (context.block_code()!=null)
-            {
-                result = parseCodeBlock(context.block_code());
-            }
-            else if (context.statement()!=null)
-            {
-                result = parseStatement(context.statement());
-            }
-        }
-        return result;
-    }
-    
-    private AssemblyCode parseExpression(BaseGrammarParser.ExpressionContext expression)
-    {
-        AssemblyCode result = null;
-        //Do not worry about function arguments here. These can be processed without being sensitive to order.
-        if (expression.assignment()!=null)
-        {
-            result = AssignmentAssembly.buildFrom(expression.assignment());
-        }
-        else if (expression.function_call()!=null)
-        {
-            result = FunctionCallAssembly.parseFrom(expression.function_call());
-        }
-        return result;
-    }
     
     private void parseItemVariables(List<BaseGrammarParser.AssignmentContext> assignments)
     {

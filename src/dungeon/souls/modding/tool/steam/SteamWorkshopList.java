@@ -41,6 +41,15 @@ public class SteamWorkshopList
     }
     
     /**
+     * Checks whether this list has the specified project module.
+     * @param moduleName The name of the module.
+     * @return True if the steam workshop module from the project module is present.
+     */
+    public boolean containsSteamWorkshopModule(String moduleName)
+    {
+        return getSteamWorkshopModule(moduleName)!=null;
+    }
+    /**
      * Returns the Steam Workshop module specified by the project module name.
      * @param moduleName The name of the project.
      * @return Returns null if none were found.

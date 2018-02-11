@@ -274,7 +274,7 @@ public class AutoCompleteWindow implements DocumentListener
      * Handles any changes to the text.
      * @param e 
      */
-    private void handleTextChange(DocumentEvent e)
+    public void handleTextChange(DocumentEvent e)
     {
         if (visible && !e.getType().equals(DocumentEvent.EventType.CHANGE))
         {
@@ -317,9 +317,12 @@ public class AutoCompleteWindow implements DocumentListener
         boolean result = false;
         if (text!=null)
         {
-            if ((text.charAt(0)==' ' || text.charAt(0)==10 || text.matches("[\n\r]+.*")) && text.length()>1)
+            if (!text.isEmpty())
             {
-                result = true;
+                if ((text.charAt(0)==' ' || text.charAt(0)==10 || text.matches("[\n\r]+.*")) && text.length()>1)
+                {
+                    result = true;
+                }
             }
         }
         return result;

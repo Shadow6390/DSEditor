@@ -7,6 +7,7 @@ package dungeon.souls.modding.tool.model.compiling.language;
 
 import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.Collections;
 import java.util.List;
 import org.antlr.v4.runtime.ANTLRErrorListener;
 import org.antlr.v4.runtime.Parser;
@@ -46,6 +47,15 @@ public class BaseGrammarErrorListener implements ANTLRErrorListener
     }
     
     /**
+     * Returns an unmodifiable list of error messages.
+     * @return The list of error messages.
+     */
+    public List<CompilationErrorMessage> getMessageList()
+    {
+        return Collections.unmodifiableList(messages);
+    }
+    
+    /**
      * Returns the specified message.
      * @param i (int) The location of the message in the list.
      * @return 
@@ -81,7 +91,7 @@ public class BaseGrammarErrorListener implements ANTLRErrorListener
                     suggestions[i]=BaseGrammarLexer.tokenNames[index];
                 }
             }
-            messages.add(new CompilationErrorMessage(string, Interval.INVALID, suggestions,line,column));
+            messages.add(new CompilationErrorMessage(string, new Interval(token.getStartIndex(),token.getStopIndex()), suggestions,line,column));
         }
         else
         {

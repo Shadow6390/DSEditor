@@ -7,6 +7,8 @@ package dungeon.souls.modding.tool.ui;
 
 import com.codedisaster.steamworks.SteamException;
 import dungeon.souls.modding.tool.model.compiling.language.DungeonSoulsLanguageCompiler;
+import dungeon.souls.modding.tool.model.compiling.language.GameVariableAssignment;
+import dungeon.souls.modding.tool.model.module.ExtensionManager;
 import dungeon.souls.modding.tool.model.module.ModuleManager;
 import dungeon.souls.modding.tool.model.module.ModuleProject;
 import dungeon.souls.modding.tool.model.module.SaveListener;
@@ -16,21 +18,26 @@ import dungeon.souls.modding.tool.steam.SteamManager;
 import dungeon.souls.modding.tool.steam.SteamWorkshopCommunityItem;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.nio.file.Files;
-import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+import java.util.Enumeration;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
@@ -40,12 +47,18 @@ import javax.swing.JViewport;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.TreeModelEvent;
+import javax.swing.event.TreeModelListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.text.DefaultCaret;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.xml.bind.JAXBException;
 
@@ -56,7 +69,7 @@ import javax.xml.bind.JAXBException;
 public class EditorMain extends javax.swing.JFrame
 {
 
-    private static final String EDITOR_VERSION="0.1.0";
+    private static final String EDITOR_VERSION="0.1.2";
     /**
      * The editor's output stream.
      */
@@ -89,6 +102,29 @@ public class EditorMain extends javax.swing.JFrame
             Logger.getLogger(EditorMain.class.getName()).log(Level.SEVERE, null, ex);
         }
         SteamManager.getInstance().addSteamListener(new ComponentEnabler(compileSteam));
+        workingTabPane.addChangeListener(new ChangeListener()
+        {
+
+            @Override
+            public void stateChanged(ChangeEvent e)
+            {
+                JCodePane pane = getSelectedCodepane();
+                if (pane!=null)
+                {
+                    pane.getCompilationHandler().syntaxCheck();
+                    List<GameVariableAssignment> list = pane.getGameVariables();
+                    if (list!=null)
+                    {
+                        DefaultTableModel model = new DefaultTableModel(new String[]{"Name","Value"}, 0);
+                        list.stream().forEach((elem) ->
+                        {
+                            model.addRow(new String[]{elem.getGameVariable(),elem.getValue()});
+                        });
+                        propertyTable.setModel(model);
+                    }
+                }
+            }
+        });
     }
     
     /**
@@ -99,10 +135,102 @@ public class EditorMain extends javax.swing.JFrame
         manager = new ModuleManager();
         root = new DefaultMutableTreeNode(manager);
         model = new DefaultTreeModel(root);
+        model.addTreeModelListener(new TreeOrganizer());
         managerTree.setModel(model);
         managerTree.addMouseListener(new ManagerMouseListener());
         loadAllProjects(manager.getAllProjects());
         managerTree.expandRow(0);
+        JButton button = new JButton("New Module");
+        button.addActionListener((ActionEvent e) ->
+        {
+            newProjectActionPerformed(e);
+        });
+        quickActionBar.add(button);
+        quickActionBar.addSeparator();
+        button = new JButton("New Sprite");
+        button.addActionListener((ActionEvent e) ->
+        {
+            newSpriteActionPerformed(e);
+        });
+        quickActionBar.add(button);
+        quickActionBar.addSeparator();
+        button = new JButton("New Item");
+        button.addActionListener((ActionEvent e) ->
+        {
+            newItemActionPerformed(e);
+        });
+        quickActionBar.add(button);
+        quickActionBar.addSeparator();
+        button = new JButton("New Function");
+        button.addActionListener((ActionEvent e) ->
+        {
+            Component c = workingTabPane.getSelectedComponent();
+            if (c instanceof JScrollPane)
+            {
+                c=((JScrollPane)c).getComponent(0);
+                c=((JViewport)c).getComponent(0);
+            }
+            if (c instanceof JCodePane)
+            {
+                ((JCodePane)c).createFunction();
+            }
+        });
+        quickActionBar.add(button);
+        quickActionBar.addSeparator();
+        button = new JButton();
+        try
+        {
+            button.setIcon(new ImageIcon(ImageIO.read(EditorMain.class.getClassLoader().getResourceAsStream("dungeon/souls/modding/tool/resources/Play.png"))
+                    .getScaledInstance(28, 28, Image.SCALE_DEFAULT)));
+        }
+        catch (IOException ex)
+        {
+            Logger.getLogger(EditorMain.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        button.addActionListener((ActionEvent e) ->
+        {
+            DefaultMutableTreeNode node = getSelectedProjectNode();
+            if (node!=null && node.getUserObject() instanceof ModuleProject)
+            {
+                ModuleProject project = (ModuleProject) node.getUserObject();
+                if (project!=null)
+                {
+                    project.save();
+                    EditorMain.out.println("Compiling, building and running project...");
+                    DungeonSoulsLanguageCompiler compiler = new DungeonSoulsLanguageCompiler();
+                    try
+                    {
+                        compiler.compileAndRun(project);
+                        out.println("Launched Dungeon Souls. Please wait until Steam loads Dungeon Souls. If you do not have the game installed on Steam, you'll have"
+                                + " to execute it directly.");
+                    }
+                    catch (IOException ex)
+                    {
+                        out.println("An error occurred whilst trying to compile and run: "+ex.getMessage());
+                    }
+                }
+            }
+        });
+        quickActionBar.add(button);
+    }
+    
+    /**
+     * Returns the currently opened code pane.
+     * @return Can be null if no panes are opened.
+     */
+    private JCodePane getSelectedCodepane()
+    {
+        Component c = workingTabPane.getSelectedComponent();
+        if (c instanceof JScrollPane)
+        {
+            c=((JScrollPane)c).getComponent(0);
+            c=((JViewport)c).getComponent(0);
+        }
+        if (c instanceof JCodePane)
+        {
+            return ((JCodePane)c);
+        }
+        return null;
     }
     
     /**
@@ -111,17 +239,29 @@ public class EditorMain extends javax.swing.JFrame
      */
     private void loadAllProjects(List<ModuleProject> projects)
     {
+        int count=0;
         for (ModuleProject project:projects)
         {
             DefaultMutableTreeNode node = new DefaultMutableTreeNode(project);
-            project.loadFilesAsNodes(node);
-            root.add(node);
+            model.insertNodeInto(node, root, count);
+            project.loadFilesAsNodes(node,model);
+            count++;
         }
     }
     
     private DefaultMutableTreeNode getSelectedProjectNode()
     {
-        return (DefaultMutableTreeNode)managerTree.getSelectionPath().getLastPathComponent();
+        DefaultMutableTreeNode result = (DefaultMutableTreeNode)managerTree.getSelectionPath().getLastPathComponent();
+        DefaultMutableTreeNode temp = result;
+        while (!(temp.getUserObject() instanceof ModuleProject) && temp.getParent()!=null)
+        {
+            temp=(DefaultMutableTreeNode)temp.getParent();
+        }
+        if (temp.getUserObject() instanceof ModuleProject)
+        {
+            result = temp;
+        }
+        return result;
     }
     
     
@@ -147,6 +287,7 @@ public class EditorMain extends javax.swing.JFrame
         newProject = new javax.swing.JMenuItem();
         popupMenuFile = new javax.swing.JPopupMenu();
         deleteFile = new javax.swing.JMenuItem();
+        jSplitPane3 = new javax.swing.JSplitPane();
         jSplitPane1 = new javax.swing.JSplitPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         managerTree = new javax.swing.JTree();
@@ -155,6 +296,9 @@ public class EditorMain extends javax.swing.JFrame
         outputTabs = new javax.swing.JTabbedPane();
         jScrollPane2 = new javax.swing.JScrollPane();
         editorLogger = new javax.swing.JTextArea();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        propertyTable = new javax.swing.JTable();
+        quickActionBar = new javax.swing.JToolBar();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -271,15 +415,19 @@ public class EditorMain extends javax.swing.JFrame
             }
         });
 
+        jSplitPane3.setDividerLocation(620);
+        jSplitPane3.setResizeWeight(0.8);
+
         jSplitPane1.setDividerLocation(128);
 
         jScrollPane1.setViewportView(managerTree);
+        managerTree.setCellRenderer(new ProjectTreeRenderer());
 
         jSplitPane1.setLeftComponent(jScrollPane1);
 
         jSplitPane2.setDividerLocation(320);
         jSplitPane2.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
-        jSplitPane2.setResizeWeight(1.0);
+        jSplitPane2.setResizeWeight(0.9);
 
         workingTabPane.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
         jSplitPane2.setTopComponent(workingTabPane);
@@ -299,6 +447,30 @@ public class EditorMain extends javax.swing.JFrame
         outputTabs.getAccessibleContext().setAccessibleName("Editor Output");
 
         jSplitPane1.setRightComponent(jSplitPane2);
+
+        jSplitPane3.setLeftComponent(jSplitPane1);
+
+        propertyTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][]
+            {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String []
+            {
+                "Name", "Value"
+            }
+        ));
+        propertyTable.setEnabled(false);
+        propertyTable.getTableHeader().setReorderingAllowed(false);
+        jScrollPane4.setViewportView(propertyTable);
+
+        jSplitPane3.setRightComponent(jScrollPane4);
+
+        quickActionBar.setFloatable(false);
+        quickActionBar.setRollover(true);
 
         jMenu1.setText("File");
 
@@ -446,14 +618,18 @@ public class EditorMain extends javax.swing.JFrame
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 834, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(quickActionBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jSplitPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 834, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 453, Short.MAX_VALUE)
+                .addGap(5, 5, 5)
+                .addComponent(quickActionBar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSplitPane3)
                 .addContainerGap())
         );
 
@@ -465,7 +641,7 @@ public class EditorMain extends javax.swing.JFrame
     {//GEN-HEADEREND:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
         new CreateProjectUI(this,true,manager,root).setVisible(true);
-        model.reload();
+        model.reload(root);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItem2ActionPerformed
@@ -497,7 +673,7 @@ public class EditorMain extends javax.swing.JFrame
         // TODO add your handling code here:
         DefaultMutableTreeNode node = getSelectedProjectNode();
         new CreateSpriteUI(this,true,(ModuleProject)node.getUserObject(),node).setVisible(true);
-        model.reload();
+        model.reload(node);
     }//GEN-LAST:event_newSpriteActionPerformed
 
     private void newItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_newItemActionPerformed
@@ -505,7 +681,7 @@ public class EditorMain extends javax.swing.JFrame
         // TODO add your handling code here:
         DefaultMutableTreeNode node = getSelectedProjectNode();
         new CreateItemUI(this,true,(ModuleProject)node.getUserObject(),node).setVisible(true);
-        model.reload();
+        model.reload(node);
     }//GEN-LAST:event_newItemActionPerformed
 
     private void newProjectActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_newProjectActionPerformed
@@ -637,17 +813,11 @@ public class EditorMain extends javax.swing.JFrame
             {
                 ModuleProject mp = (ModuleProject) node.getUserObject();
                 File base = new File(mp.getDirectory().getAbsoluteFile()+File.separator+"Sprites");
-                for (File element:images)
+                List<FileEditable> addedFiles = mp.loadImages(base,images);
+                int count=0;
+                for (FileEditable elem:addedFiles)
                 {
-                    try
-                    {
-                        Files.copy(element.toPath(), new File(base.getAbsolutePath()+File.separator+element.getName()).toPath(), REPLACE_EXISTING);
-                        EditorMain.out.println("Added image '"+element.getName()+"' to the project's sprite repository (/Sprites).");
-                    }
-                    catch (IOException ex)
-                    {
-                        EditorMain.out.println("Error adding image '"+element.getName()+"': "+ex.getMessage());
-                    }
+                    model.insertNodeInto(new DefaultMutableTreeNode(elem), node, count++);
                 }
             }
         }
@@ -808,6 +978,9 @@ public class EditorMain extends javax.swing.JFrame
         });
     }
     
+    /**
+     * Fetches the available look and feels.
+     */
     private void fetchLookandFeels()
     {
         UIManager.LookAndFeelInfo[] feels = UIManager.getInstalledLookAndFeels();
@@ -884,30 +1057,13 @@ public class EditorMain extends javax.swing.JFrame
                         {
                             editable.addSaveListener(indicator);
                         }
-                        JCodePane codePane = (JCodePane) editable.contentToTextPane();
-                        if (!alreadyOpened(codePane)) //Check if the tab is already opened.
+                        if (editable.contentToComponent() instanceof JCodePane)
                         {
-                            codePane.initSuggestionWindow(EditorMain.this);
-                            JScrollPane pane = new JScrollPane(codePane);
-                            TextLineNumber number = new TextLineNumber(codePane);
-                            number.setCurrentLineForeground(new Color(0,127,255));
-                            pane.setRowHeaderView(number);
-                            codePane.getInputMap().put(KeyStroke.getKeyStroke("control W"), "closeTab");
-                            codePane.getActionMap().put("closeTab", new AbstractAction()
-                            {
-                                private IndicateFileChange ind = indicator;
-                                
-                                @Override
-                                public void actionPerformed(ActionEvent e)
-                                {
-                                    workingTabPane.remove(workingTabPane.getSelectedIndex());
-                                    ind.obsolete=true;
-                                }
-                            });
-                            codePane.getDocument().addDocumentListener(indicator);
-                            workingTabPane.addTab(o.toString(), pane);
-                            indicator.index=workingTabPane.getTabCount()-1;
-                            workingTabPane.getModel().setSelectedIndex(workingTabPane.getTabCount()-1);
+                            addJCodePaneToTab(editable, indicator);
+                        }
+                        else
+                        {
+                            addJComponentToTab(editable,indicator);
                         }
                     }
                 }
@@ -930,18 +1086,74 @@ public class EditorMain extends javax.swing.JFrame
                 }
             }
         }
+            
+        /**
+         * Adds a JCodePane to the working tab pane.
+         * @param editable The file editable that contains the JCodePane.
+         * @param indicator The file indicator that listens for modifications.
+         */
+        private void addJCodePaneToTab(FileEditable editable,IndicateFileChange indicator)
+        {
+            if (editable.contentToComponent() instanceof JCodePane)
+            {
+                JCodePane codePane = (JCodePane) editable.contentToComponent();
+                if (!alreadyOpened(codePane)) //Check if the tab is already opened.
+                {
+                    codePane.initSuggestionWindow(EditorMain.this);
+                    JScrollPane pane = new JScrollPane(codePane);
+                    TextLineNumber number = new TextLineNumber(codePane);
+                    number.setCurrentLineForeground(new Color(0,127,255));
+                    pane.setRowHeaderView(number);
+                    codePane.getInputMap().put(KeyStroke.getKeyStroke("control W"), "closeTab");
+                    codePane.getActionMap().put("closeTab", new AbstractAction()
+                    {
+                        private IndicateFileChange ind = indicator;
+
+                        @Override
+                        public void actionPerformed(ActionEvent e)
+                        {
+                            workingTabPane.remove(workingTabPane.getSelectedIndex());
+                            ind.obsolete=true;
+                        }
+                    });
+                    codePane.getDocument().addDocumentListener(indicator);
+                    workingTabPane.addTab(editable.toString(), pane);
+                    indicator.index=workingTabPane.getTabCount()-1;
+                    workingTabPane.setTabComponentAt(indicator.index, new ButtonTabComponent(workingTabPane));
+                    workingTabPane.getModel().setSelectedIndex(workingTabPane.getTabCount()-1);
+                }
+            }
+        }
         
         /**
-         * Checks whether the given JCodePane is already opened.
+         * Adds a JComponent to the working tab pane.
+         * @param editable The file editable that contains the JComponent.
+         * @param indicator The file indicator that listens for modifications.
+         */
+        private void addJComponentToTab(FileEditable editable,IndicateFileChange indicator)
+        {
+            JComponent component = editable.contentToComponent();
+            if (!alreadyOpened(component)) //Check if the tab is already opened.
+            {
+                JScrollPane pane = new JScrollPane(component);
+                workingTabPane.addTab(editable.toString(), pane);
+                indicator.index=workingTabPane.getTabCount()-1;
+                workingTabPane.setTabComponentAt(indicator.index, new ButtonTabComponent(workingTabPane));
+                workingTabPane.getModel().setSelectedIndex(workingTabPane.getTabCount()-1);
+            }
+        }
+        
+        /**
+         * Checks whether the given JComponent is already opened.
          * @param pane The pane to check.
          * @return True if already opened.
          */
-        private boolean alreadyOpened(JCodePane pane)
+        private boolean alreadyOpened(JComponent pane)
         {
             boolean result = false;
             for (int i=0;i<workingTabPane.getTabCount() && !result;i++)
             {
-                Component c = workingTabPane.getTabComponentAt(i);
+                Component c = workingTabPane.getComponentAt(i);
                 if (c instanceof JScrollPane)
                 {
                     c=((JScrollPane)c).getComponent(0);
@@ -951,6 +1163,159 @@ public class EditorMain extends javax.swing.JFrame
                         result = true;
                     }
                 }
+            }
+            return result;
+        }
+    }
+    
+    private static class TreeFolder extends DefaultMutableTreeNode
+    {
+        public TreeFolder()
+        {
+            super();
+        }
+        
+        public TreeFolder(Object object)
+        {
+            super(object);
+        }
+        
+        @Override
+        public boolean equals(Object other)
+        {
+            boolean result = other != null && getClass().isInstance(other);
+            if (result)
+            {
+                TreeFolder ob = getClass().cast(other);
+                result = (this == other) || (getUserObject().toString().equals(ob.getUserObject().toString()));
+            }
+            return result;
+        }
+
+        @Override
+        public int hashCode()
+        {
+            int hash = 7;
+            return hash;
+        }
+    }
+    
+    /**
+     * A class that is responsible for organizing the contents of the tree
+     * into folders.
+     */
+    private class TreeOrganizer implements TreeModelListener
+    {
+        private boolean requestedRefresh = false;
+
+        @Override
+        public void treeNodesChanged(TreeModelEvent e)
+        {
+            System.out.println("Something changed.");
+        }
+
+        @Override
+        public void treeNodesInserted(TreeModelEvent e)
+        {
+            restructureTree(e);
+        }
+
+        @Override
+        public void treeNodesRemoved(TreeModelEvent e)
+        {
+            System.out.println("Something removed.");
+        }
+
+        @Override
+        public void treeStructureChanged(TreeModelEvent e)
+        {
+            restructureTree(e);
+        }
+
+        private void restructureTree(TreeModelEvent e)
+        {
+            if (!requestedRefresh)
+            {
+                DefaultMutableTreeNode node = ((DefaultMutableTreeNode)e.getTreePath().getLastPathComponent());
+                if (node.getUserObject() instanceof ModuleProject)
+                {
+                    Map<String,TreeFolder> map = ensureBaseDirectories(node);
+                    Enumeration children = node.children();
+                    while (children.hasMoreElements())
+                    {
+                        Object ob = children.nextElement();
+                        if (ob instanceof DefaultMutableTreeNode)
+                        {
+                            DefaultMutableTreeNode childNode = (DefaultMutableTreeNode)ob;
+                            Object userObject = childNode.getUserObject();
+                            if (userObject instanceof FileEditable)
+                            {
+                                String extension = ((FileEditable) userObject).getFileName();
+                                extension = extension.substring(extension.lastIndexOf(".")+1);
+                                if (ExtensionManager.getInstance().isExtensionSpriteFile(extension))
+                                {
+                                    map.get("Sprites").add(childNode);
+                                }
+                                else if (ExtensionManager.getInstance().isExtensionModuleFile(extension))
+                                {
+                                    map.get("Module").add(childNode);
+                                }
+                                else if (ExtensionManager.getInstance().isExtensionItemFile(extension))
+                                {
+                                    map.get("Items").add(childNode);
+                                }
+                                else if (ExtensionManager.getInstance().isExtensionImage(extension))
+                                {
+                                    map.get("Images").add(childNode);
+                                }
+                            }
+                        }
+                    }
+                }
+                requestedRefresh=true;
+                model.reload(node);
+            }
+            else
+            {
+                requestedRefresh=false;
+            }
+        }
+
+        /**
+         * Ensures that the project node has the default directories.
+         * These are the Sprites, Functions, Module and Items directories.
+         */
+        private Map<String,TreeFolder> ensureBaseDirectories(DefaultMutableTreeNode node)
+        {
+            Map<TreeFolder,Boolean> rootDirectories = new LinkedHashMap<>();
+            TreeFolder sprites = new TreeFolder("Sprites");
+            //TreeFolder functions = new TreeFolder("Functions");
+            TreeFolder module = new TreeFolder("Module");
+            TreeFolder items = new TreeFolder("Items");
+            TreeFolder images = new TreeFolder("Images");
+            rootDirectories.put(sprites, false);
+            //rootDirectories.put(functions, false);
+            rootDirectories.put(module, false);
+            rootDirectories.put(items, false);
+            rootDirectories.put(images, false);
+            TreeNode child;
+            for (int i=0;i<node.getChildCount();i++)
+            {
+                child = node.getChildAt(i);
+                if (rootDirectories.containsKey(child))
+                {
+                    rootDirectories.remove((TreeFolder)child);
+                    rootDirectories.put((TreeFolder)child,true);
+                }
+            }
+            Map<String,TreeFolder> result = new LinkedHashMap<>();
+            for (Entry<TreeFolder,Boolean> elem:rootDirectories.entrySet())
+            {
+                if (!elem.getValue())
+                {
+                    node.add(elem.getKey());
+                }
+                result.put(elem.getKey().toString(),elem.getKey());
             }
             return result;
         }
@@ -1078,8 +1443,10 @@ public class EditorMain extends javax.swing.JFrame
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JSplitPane jSplitPane2;
+    private javax.swing.JSplitPane jSplitPane3;
     private javax.swing.JTree managerTree;
     private javax.swing.JMenuItem newItem;
     private javax.swing.JMenuItem newProject;
@@ -1088,6 +1455,8 @@ public class EditorMain extends javax.swing.JFrame
     private javax.swing.JPopupMenu popupMenu;
     private javax.swing.JPopupMenu popupMenuFile;
     private javax.swing.JPopupMenu popupMenuManager;
+    private javax.swing.JTable propertyTable;
+    private javax.swing.JToolBar quickActionBar;
     private javax.swing.JMenuItem steamInitItem;
     private javax.swing.JMenu steamMenu;
     private javax.swing.JTabbedPane workingTabPane;
