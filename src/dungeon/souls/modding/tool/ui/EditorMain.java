@@ -61,6 +61,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 import javax.xml.bind.JAXBException;
+import dungeon.souls.modding.tool.model.generic.EditorConfig;
 
 /**
  *
@@ -68,8 +69,6 @@ import javax.xml.bind.JAXBException;
  */
 public class EditorMain extends javax.swing.JFrame
 {
-
-    private static final String EDITOR_VERSION="0.1.2";
     /**
      * The editor's output stream.
      */
@@ -177,6 +176,15 @@ public class EditorMain extends javax.swing.JFrame
         });
         quickActionBar.add(button);
         quickActionBar.addSeparator();
+        
+        button = new JButton("Add Image");
+        button.addActionListener((ActionEvent e) ->
+        {
+            imageAddActionPerformed(e);
+        });
+        quickActionBar.add(button);
+        quickActionBar.addSeparator();
+        
         button = new JButton();
         try
         {
@@ -402,7 +410,7 @@ public class EditorMain extends javax.swing.JFrame
         popupMenuFile.add(deleteFile);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("DSEditor ("+EDITOR_VERSION+")");
+        setTitle("DSEditor ("+EditorConfig.EDITOR_VERSION+")");
         addWindowListener(new java.awt.event.WindowAdapter()
         {
             public void windowClosing(java.awt.event.WindowEvent evt)
@@ -890,6 +898,7 @@ public class EditorMain extends javax.swing.JFrame
         {
             // TODO add your handling code here:
             SteamManager.getInstance().saveData();
+            EditorConfig.getInstance().saveData();
         }
         catch (JAXBException ex)
         {
@@ -938,46 +947,6 @@ public class EditorMain extends javax.swing.JFrame
             }
         }
     }//GEN-LAST:event_deleteFileActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[])
-    {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Metal".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-            //UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(EditorMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(EditorMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(EditorMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(EditorMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable()
-        {
-            public void run()
-            {
-                new EditorMain().setVisible(true);
-            }
-        });
-    }
-    
     /**
      * Fetches the available look and feels.
      */

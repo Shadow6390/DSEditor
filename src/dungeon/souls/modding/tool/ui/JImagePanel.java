@@ -16,10 +16,17 @@ import javax.swing.JPanel;
  */
 public class JImagePanel extends JPanel{
     
+    public static final int RESIZE_NONE=0;
+    public static final int RESIZE_FIT=1;
     /**
      * The image to be displayed.
      */
     private BufferedImage image;
+    
+    /**
+     * The resize mode.
+     */
+    private int resizeMode=RESIZE_NONE;
     
     public JImagePanel()
     {
@@ -33,18 +40,29 @@ public class JImagePanel extends JPanel{
     }
     
     /**
+     * @param resizeMode the resizeMode to set
+     */
+    public void setResizeMode(int resizeMode)
+    {
+        this.resizeMode = resizeMode;
+    }
+    
+    /**
      * Sets a new image to this image panel
      * @param image (BufferedImage) The image to draw.
      */
     public void setImage(BufferedImage image)
     {
         this.image=image;
-        Dimension dim = new Dimension(image.getWidth(),image.getHeight());
-        setPreferredSize(dim);
-        setMinimumSize(dim);
-        setMaximumSize(dim);
-        setSize(dim);
-        repaint();
+        if (image!=null && resizeMode==RESIZE_NONE)
+        {
+            Dimension dim = new Dimension(image.getWidth(),image.getHeight());
+            setPreferredSize(dim);
+            setMinimumSize(dim);
+            setMaximumSize(dim);
+            setSize(dim);
+            repaint();
+        }
     }
     
     /**
@@ -63,7 +81,13 @@ public class JImagePanel extends JPanel{
         g.drawRect(0, 0, getWidth()-1, getHeight()-1);
         if (image!=null)
         {
-            g.drawImage(image, 0,0,image.getWidth(), image.getHeight(), null);
+            int ww=image.getWidth(),hh=image.getHeight();
+            if (resizeMode==RESIZE_FIT)
+            {
+                ww = getWidth();
+                hh = getHeight();
+            }
+            g.drawImage(image, 0,0,ww,hh, null);
         }
     }
 }

@@ -113,7 +113,7 @@ public class ItemCodeTemplate extends BaseCodeTemplate
    @Override
     public String getTemplateCode()
     {
-        String base = "define item "+DungeonSoulsLanguageCompiler.convertToVarible(name)+"\n{\n";
+        String base = "define item itm_"+DungeonSoulsLanguageCompiler.convertToVarible(name)+"\n{\n";
         String autoFilled = ObjectToTextConverter.toText(this);
         for (String line:autoFilled.split("\n"))
         {

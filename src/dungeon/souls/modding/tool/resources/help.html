@@ -40,13 +40,7 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
     <i class="fa fa-remove"></i>
   </a>
   <h4 class="w3-bar-item"><b>Reference</b></h4>
-  <a class="w3-bar-item w3-button w3-hover-black" href="./help_addGold.html">addGold</a>
-  <a class="w3-bar-item w3-button w3-hover-black" href="./help_distanceToNearestEnemy.html">distanceToNearestEnemy</a>
-  <a class="w3-bar-item w3-button w3-hover-black" href="./help_enemyCount.html">enemyCount</a>
-  <a class="w3-bar-item w3-button w3-hover-black" href="./help_playerAttribute.html">getPlayerAttribute</a>
-  <a class="w3-bar-item w3-button w3-hover-black" href="./help_loggerWrite.html">loggerWrite</a>
-  <a class="w3-bar-item w3-button w3-hover-black" href="./help_printConsole.html">printConsole</a>
-  <a class="w3-bar-item w3-button w3-hover-black" href="./help_playerAttribute.html">setPlayerAttribute</a>
+  <!--!!FUNCTION_LINKS!!-->
 </nav>
 
 <!-- Overlay effect when opening sidebar on small screens -->
@@ -60,8 +54,8 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
       <h1 class="w3-text-teal">Getting Started with Dungeon Souls Modding</h1>
 	  <p><i class="w3-text-gray">Disclaimer: This documentation, the editor and modding support are still in alpha version, so expect more features to arrive (and please be a little patient with certain issues)!</i></p>
       <p>Dungeon Souls is a rogue-like, dungeon crawler game made with Game Maker Studio 1.4. Chances are that, if you're reading this, you probably already know this fact. However, since it was developed with Game Maker Studio 1.4, there is an important concept to keep in mind: the base engine of Dungeon Souls is not meant to support modding completely. The default engine just supports media asset addition such as sprites and audio. As such, two programming languages have been created for this purpose.</p> 
-	  <p>The first, called <b class="w3-text-purple">Dungeon Souls Modding Language (DSML)</b> is a high-level language to code mods for Dungeon Souls and primarly the one you'll be using. The second, called <b class="w3-text-purple">Dungeon Souls Assembly Language (DSAL)</b> is a low-level language used by Dungeon Souls' game engine to enable modding support. The <b class="w3-text-blue">Dungeon Souls Modding Editor (DSEditor)</b> will convert from DSML to DSAL, so there is no need to actually change the DSAL, unless you know what you're doing. <b>It is strongly reccommended not to change any DSAL files</b>.</p>
-	  <p>Below is a quick tutorial to get you started with your first modding project! If you have programming experience, you may find the <a href="./help_onboarding.html">Quick Onboarding</a> page more suitable.</b>
+	  <p>The first, called <b class="w3-text-purple">Dungeon Souls Modding Language (DSML)</b> is a high-level language to code mods for Dungeon Souls and primarly the one you'll be using. The second, called <b class="w3-text-purple">Dungeon Souls Assembly Language (DSAL)</b> is a low-level language used by Dungeon Souls' game engine to enable modding support. The <b class="w3-text-blue">Dungeon Souls Modding Editor (DSEditor)</b> will convert from DSML to DSAL, so there is no need to actually change the DSAL, unless you know what you're doing. <b>It is strongly recommended not to change any DSAL files</b>.</p>
+	  <p>Below is a quick tutorial to get you started with your first modding project! If you have programming experience, you may find the <a href="./help_onboarding.html" class="w3-hover-text-light-blue">Quick Onboarding</a> page more suitable.</b>
     </div>
   </div>
 
@@ -90,12 +84,12 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
 		<span class="w3-text-purple">[DESCRIPTION]</span>=<span class="w3-text-orange">"My first module for Dungeon Souls!"</span>;<br>
 		<span class="w3-text-purple">[SPRITE_DIR]</span>=<span class="w3-text-orange">"Sprites"</span>;<br>
 		<br>
-		<i class="w3-text-gray">#Place code here...</i><br>
+		<i class="w3-text-gray">//Place code here...</i><br>
         }</div>
 		<p>If you look at the code, you can see some familiar information. The name, version and description values inserted in the previous window are already set to their corresponding variables. In <b class="w3-text-purple">DSML</b>, certain types of code (often referred as <b class="w3-text-blue">definitions</b>) will have certain types of <b class="w3-text-orange">Game Variables</b>. These represent a special kind of variable, which set important variables for the <b class="w3-text-blue">definition</b> to work properly before any code is executed. <b class="w3-text-orange">Game Variables</b> have the following syntax:</p>
 		<div class="w3-codespan w3-text-orange">[&lt;NAME_OF_THE_GAME_VARIABLE&gt;]</div>
 		<p>Apart from the Game Variables specified previously, you can also check that there is one extra game variable called <b class="w3-text-orange">SPRITE_DIR</b>. This game variable specifies the directory where the graphical assets will be stored, so that the engine knows where to load the sprites from. Currently, this value cannot be changed (changing it will cause an error on Dungeon Souls), but is planned to be able to accept any value, as to customize sprite location.</p>
-		<p>Finally, there is one more element in the code, which is the <b class="w3-text-blue">comment</b>. Comments are pieces of text that are ignored by the compiler, but allow for easy documentation on the code. Use them whenever you need to explain an important concept or set a friendly reminder of what a particular piece of code does in your module. <b class="w3-text-blue">Comments</b> start with an <b class="w3-text-blue">#</b> and currently do not possess multiple lines.</p>
+		<p>Finally, there is one more element in the code, which is the <b class="w3-text-blue">comment</b>. Comments are pieces of text that are ignored by the compiler, but allow for easy documentation on the code. Use them whenever you need to explain an important concept or set a friendly reminder of what a particular piece of code does in your module. <b class="w3-text-blue">Comments</b> start with <b class="w3-text-blue">//</b> and currently do not possess multiple lines.</p>
     </div>
   </div>
 
@@ -111,7 +105,205 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
 		<li><span class="w3-text-blue">Sprite</span> - represents the definition of a new sprite. Sprites are graphical assets that can be used in any definition that requires a graphical representaton, such as items.</li>
 	  </ul>
 	  
-	  <i>To be completed...</i>
+	  <p>In this tutorial, we have already taken a look at a <b class="w3-text-blue">module definition</b>. We will also create a <b class="w3-text-blue">sprite</b>, <b class="w3-text-blue">function</b> and <b class="w3-text-blue">item</b> using their respective definitions. We will also take a brief look at the syntax and features of <b class="w3-text-purple">DSML</b>. To do this, we'll create a legendary active item that kills all nearby enemies. For each enemy killed, the player gains extra max hp.</p>
+    </div>
+  </div>
+  
+  <div class="w3-row w3-padding-64">
+    <div class="w3-twothird w3-container">
+      <h1 class="w3-text-teal">Creating a Sprite</h1>
+      <p>In order to have custom graphical images in the game, a <b class="w3-text-blue">sprite</b> must be defined. A sprite can be perceived as a collection of images. If the collection only has one image (<i>often called <b class="w3-text-light-blue">subimage</b></i>), then the sprite can be effectively treated as an image. However, if the sprite contains more than one subimage, then the sprite can be considered as an animation.</p> 
+	  <p>Before we <b class="w3-text-blue">define</b> a sprite, we must add an image file to our project. To do so, we can do so in two ways:
+	  <ol>
+		<li>Right-click on the target project, then select <i class="w3-text-green">Add Existing...>Image</i></li>
+		<li>Selecting the desired target project on the Project Tree, then clicking the quick action <b class="w3-text-light-blue">Add Image</b></li>
+	  </ol>
+	  Performing any of these actions will open a file choose dialog box to select the desired image to load (check the <b class="w3-text-blue">Sprite Definition Reference</b> for more information on the types of images allowed). For this tutorial, we'll choose an image of a gem, with size 24x24. When the editor adds an image, it will appear under the <i class="w3-text-orange">Images</i> folder of the project. The editor automatically sorts any content that you add to a project, for organization's sake.
+	  </p>
+	  <p>After adding the image to the project, we can now <b class="w3-text-blue">define</b> our <b class="w3-text-blue">sprite</b>. Similarly to the image addition, creating a sprite can also be done in the following two ways:
+	  <ol>
+		<li>Right-click on the target project, then select <i class="w3-text-green">Create New...>Sprite</i></li>
+		<li>Selecting the desired target project on the Project Tree, then clicking the quick action <b class="w3-text-light-blue">New Sprite</b></li>
+	  </ol>
+	  After a request to create a sprite has been performed, a window will appear, asking the name of the sprite. A good naming convention for sprites is to always start their name with <b class="w3-text-light-purple">spr</b>. Furthermore, we will use the camelCase convention when naming variables (<i class="w3-text-gray">camelCase states that spaces are removed and the first letter of the subsequent word is capitalized. For example, "Lorem Ipsum" would be translated to "loremIpsum" in camelCase notation</i>). As such, we'll name ours <b class="w3-text-light-green">sprLifeAlchemyGem</b>. After the code has been generated, we set the <b class="w3-text-orange">Game Variable [SUBIMAGE]</b>'s value with the relative path to the image (which, in this case, is just the image itself), as such:
+	  </p>
+	  <div class="w3-code"><span class="w3-text-blue">define sprite </span>sprLifeAlchemyGem<br>
+        {<br>
+		<span class="w3-text-purple">[SUBIMAGE]</span>=<span class="w3-text-orange">"spr_Gem.png"</span>;<br>
+		<br>
+		<br>
+		<i class="w3-text-gray">//Sprites can have multiple [SUBIMAGE] fields.</i><br>
+		<i class="w3-text-gray">//The order of the sprite's animation is defined by the order of appearance of each [SUBIMAGE]</i><br>
+        }</div>
+		<p>As specified in the comments, the order of the <b class="w3-text-orange">[SUBIMAGE]</b> determines the order of the animation. The modding system determines the order in a top-down fashion, meaning that if, for example, the first subimage declaration has a picture of an apple and the second subimage declaration has a picture of a gem, the sprite's animation will be an apple followed by a gem. Do keep in mind that all animations cycle (<i class="w3-text-gray">meaning that, when the animation reaches the end, it will start again from the first subimage</i>).</p>
+		<p>Next, we'll learn how to create the item!<p>
+    </div>
+  </div>
+  
+  <div class="w3-row w3-padding-64">
+    <div class="w3-twothird w3-container">
+      <h1 class="w3-text-teal">Creating an Item</h1>
+	  <h3 class="w3-text-teal">Item Definition</h3>
+      <p>In <b class="w3-text-purple">Dungeon Souls</b>, items are objects that aid the player during runs. These can behave in one of three ways:
+	  <ul>
+	  <li><b class="w3-text-blue">Passive Effect</b>: stat increases or special actions that occur during specific events;</li>
+	  <li><b class="w3-text-blue">Active Effect</b>: stat increases or special actions that occur when the player triggers its active item ability. The player can only have one active item at a time;</li>
+	  <li><b class="w3-text-blue">Consumable Effect</b>: stat increases or other usually less significant actions that occur when the player consumes the item (triggering its active item ability). Consumable items can stack.</li>
+	  </ul>
+	  Items are found in chests and can sometimes be dropped by monsters and other special items. Depending on their <b class="w3-text-blue">rarity</b> (<i>denoted by their outline color</i>), items can only spawn in certain chests. Usually, the rarer the item is, the more powerful the effect is. Each item can have one of the following rarities:
+	  <ul>
+	  <li><b class="w3-text-gray">Common</b>: common items with normal/simple effects, spawning frequently in regular chests;</li>
+	  <li><b class="w3-text-light-green">Uncommon</b>: these are less common than <b class="w3-text-blue">Common</b> items, but can still spawn in regular chests;</li>
+	  <li><b class="w3-text-light-blue">Rare</b>: items that are rare to spawn, whose effects are quite powerful. These usually spawn in higher-end chests;</li>
+	  <li><b class="w3-text-amber">Legendary</b>: items with dramatic effects, spawning only in the rarest chests (or occasionally on the shop keeper);</li>
+	  <li><b class="w3-text-purple">Cursed</b>: items that usually give an <i>over-powered</i> effect, but have a terrible downside. These items only spawn in <b class="w3-text-blue">Cursed Chests</b></li>
+	  </ul>
+	  An <b class="w3-text-blue">item</b> can be defined in one of the following ways:
+	  <ol>
+		<li>Right-click on the target project, then select <i class="w3-text-green">Create New...>Item</i></li>
+		<li>Selecting the desired target project on the Project Tree, then clicking the quick action <b class="w3-text-light-blue">New Item</b></li>
+	  </ol>
+	  After a request to create a sprite has been performed, a window will appear, asking the following set of information:
+	  <ul>
+		<li><b>Name (required) -</b> The name of the item, which will be shown in-game.</li>
+		<li><b>Description (required)-</b> The description of the item that will be shown during game.</li>
+		<li><b>Max Stacks (required) -</b> The maximum amount of times the item stacks (a.k.a. the amount of times the player can pick up the same item).</li>
+		<li><b>Price (required) -</b> The base price of the item (when sold in shop). The price scales with the dungeon's level.</li>
+		<li><b>Type (required) -</b> The type of item.</li>
+		<li><b>Rarity (required) -</b> The rarity of the item.</li>
+		<li><b>onItemPickup Function -</b> The function to call when picking up the item.</li>
+		<li><b>onItemActivated Function -</b> The function to call when the player activates the item (only for active and consumable items).</li>
+		<li><b>stepTick Function -</b> The function to call at each step (only for passive items).</li>
+	  </ul>
+		In this tutorial, we'll fill the information as follows:
+		<ul>
+			<li><b>Name (required) -</b> Life Alchemy Gem.</li>
+			<li><b>Description (required)-</b> <span class="w3-text-orange">[ACTIVE] Kills all nearby enemies and#converts their deaths into max hp</span></li>
+			<li><b>Max Stacks (required) -</b> 1</li>
+			<li><b>Price (required) -</b> 600</li>
+			<li><b>Type (required) -</b> item_active</li>
+			<li><b>Rarity (required) -</b> item_legendary</li>
+			<li><b>onItemActivated Function -</b> lifeAlchemyGemActiveFunction()</li>
+		 </ul>
+	  </p>
+	  After filling the information, the editor should generate the following code:
+	  <div class="w3-code"><span class="w3-text-blue">define item </span>itm_Life_Alchemy_Gem<br>
+        {<br>
+		<span class="w3-text-purple">[NAME]</span>=<span class="w3-text-orange">"Life Alchemy Gem"</span>;<br>
+		<span class="w3-text-purple">[MAX_STACKS]</span>=<span class="w3-text-orange">1</span>;<br>
+		<span class="w3-text-purple">[DESCRIPTION]</span>=<span class="w3-text-orange">"[ACTIVE] Kills all nearby enemies and#converts their deaths into max hp"</span>;<br>
+		<i class="w3-text-gray">//[SPRITE];</i><br>
+		<span class="w3-text-purple">[TYPE]</span>=<span class="w3-text-orange">"item_active"</span>;<br>
+		<span class="w3-text-purple">[RARITY]</span>=<span class="w3-text-orange">"item_legendary"</span>;<br>
+		<i class="w3-text-gray">//[ON_PICKUP_FUNCTION];</i><br>
+		<span class="w3-text-purple">[ON_ACTIVE_FUNCTION]</span>=lifeAlchemyGemActiveFunction();<br>
+		<i class="w3-text-gray">//[ON_STEP_FUNCTION];</i><br>
+		<br>
+		<br>
+		<i class="w3-text-gray">//Place function declarations here...</i><br>
+        }</div>
+		Despite the editor generating a lot of the code for the item, we still need to do a few changes:
+		<ul>
+		<li>Set the sprite of the item (<i>to which we just need to set it as <span class="w3-text-light-blue">sprLifeAlchemyGem</span>, as defined previously</i>);</li>
+		<li>Define the <b class="w3-text-light-blue">lifeAlchemyGemActiveFunction</b> that will be executed when the player activates the item.
+		</ul>
+		<p>It is important to note that, due to the way <b class="w3-text-light-green">Game Maker Studio 1.4</b> (<i class="w3-text-purple">Dungeon Souls'</i> <i>native game engine</i>), the special character <b class="w3-text-light-blue">#</b> seen in the item's description corresponds to the new line operator, creating a new line at the specified place. For example, the example <b class="w3-text-orange">"This is a line#This is another line"</b> would produce the following text:</p>
+		<div class="w3-codespan w3-text-gray">
+		This is a line<br>
+		This is another line
+		</div>
+		<p>Function definition is slightly more complicated (since it will be the first time we also introduce coding concepts). As such, the next subsection will provide a bit more information of the function that we need to define in our <b class="w3-text-light-blue">Life Alchemy Gem</b> item.</p>
+		<h3 class="w3-text-teal">Function Definition</h3>
+		<p>In <b class="w3-text-purple">DSML</b>, functions are, in a nutshell, blocks of code that can be called by other blocks of code. The difference between regular blocks of code and functions is that functions can accept input values (<i>known as <span class="w3-text-blue">arguments</span></i>), as well as produce an output value (<i>known as the function's <span class="w3-text-blue">return value</span></i>). Functions are useful for a wide variety of reasons, since they allow for code to be reused.</p>
+		<p>One of the possible uses is to keep the <b class="w3-text-blue">code modular and easy to understand</b>. Let's briefly explore this concept in a simple example. Let's assume that we're making a piece of code where we need to use the total defense of the player several times. We'll also assume, for now, that the player only has defense and magic resist. As such, the code would look something like this:</p>
+		<div class="w3-codespan w3-text-gray">
+		...<br>
+		defensePercentage=defense/(defense+resist);<br>
+		resistPercentage=resist/(defense+resist);<br>
+		<br>...
+		</div>
+		<p>In the example above, we're calculating what percentage does the 'defense' stat occupy from the player's total defense and doing the exact same thing for the 'resist' stat. At a first glance, this bit of code might seem okay, but shortly becomes a problem when we ask ourselves a simple question: What if the total defense of the player changes over time?</p>
+		<p>For example, it's perfectly plausible to think that the total defense of the player might include bonus defense or bonus resist (or some other variable that we do not know yet). If this happens, this means we'll have to change <b>all</b> lines of code that calculate the total player's defense. This is where functions come in handy. If we had a function that would return the total defense of the player, then we would only need to make changes in one place! Such a function could be defined as follows:</p>
+		<div class="w3-code"><span class="w3-text-blue">define function </span>totalPlayerDefense<br>
+        {<br>
+		<span class="w3-text-blue">functionOutput</span> result;<br>
+		<i class="w3-text-gray">//...</i><br>
+		result=defense+resist;<br>
+		}</div>
+		<p>And done! With the function above, we would replace our existing code with the following:</p>
+		<div class="w3-codespan w3-text-gray">
+		...<br>
+		defensePercentage=defense/totalPlayerDefense();<br>
+		resistPercentage=resist/totalPlayerDefense();<br>
+		<br>...
+		</div>
+		<p>As we can see, not only is it easier make any changes to the total player defense behaviour, as it is also easier to know what our code is doing! Even though this is a small example, <b>keeping this kind of mindset is highly encouraged and recommended</b>, as it will make your life easier in the future.</p>
+		<p>Now, back to the definition of our <b class="w3-text-light-blue">lifeAlchemyGemActiveFunction</b>! Remember that our item is supposed to kill all nearby enemies and then increase the maximum health of the player by the amount of enemies killed. This effect can be composed into smaller tasks that make it easier for us to code the behaviour:
+		<div class="w3-codespan w3-text-gray">
+		<ul>
+		<li>Start the enemy kill count with the value zero;</li>
+		<li>Get all enemies within a certain radius;</li>
+		<li>For each enemy found:</li>
+		<ul>
+		<li>Kill the enemy;</li>
+		<li>Add 1 to the enemy kill count;</li>
+		</ul>
+		<li>Get the player's maximum health;</li>
+		<li>Add the kill count value to the player's maximum health;</li>
+		<li>Set the player's new maximum health;</li>
+		</ul></p>
+		</div>
+		<p>Now that we've described the foundations of our code into simple tasks, it's time to translate these tasks into something the machine can understand (<i>in this case, translate it into</i> <i class="w3-text-purple">DSML</i>)! We can do this as follows (<i>feel free to take your time analyzing the code</i>):</p>
+		<div class="w3-code"><span class="w3-text-blue">define function </span>lifeAlchemyGemActiveFunction<br>
+        {<br>
+		<i class="w3-text-gray">//We'll start by getting a list of all the enemies in a 96 radius of the player</i><br>
+		playerX = getPlayerAttribute("x");<br>
+		playerY = getPlayerAttribute("y");<br>
+		enemyList = enemiesInRadius(playerX,playerY,96);
+		<i class="w3-text-gray">//enemiesInRadius returns an id to a list that contains all enemies found in a specific radius.</i><br>
+		enemyCount = 0;<br>
+		<i class="w3-text-gray">//Start the variable that will count how many enemies we've killed. Now, we'll cycle through it using a for statement.</i><br>
+		size = listSize(enemyList);<br>
+		<span class="w3-text-blue">for</span> (i=0:i&lt;size;i=i+1)<br>
+		{<br>
+		<span style="margin-left:40px;">enemy = listGet(enemyList,i); <i class="w3-text-gray">//Get the id of the enemy</i></span><br>
+		<span style="margin-left:40px;">enemyKill(enemy);</span><br>
+		<span style="margin-left:40px;">enemyCount = enemyCount+1; <i class="w3-text-gray">//Count one more enemy killed</i></span><br>
+		}<br>
+		maxHp = getPlayerAttribute("hpmax");<br>
+		maxHp = maxHp+enemyCount; <i class="w3-text-gray">//Add the amount of enemies killed to the player's max hp</i><br>
+		setPlayerAttribute("hpmax",maxHp); <i class="w3-text-gray">//Set the player's max hp</i><br>
+		listDestroy(enemyList); <i class="w3-text-gray">//Every list allocates memory in the game. When we no longer need it, we destroy it!</i><br>
+		}</div>
+		<p>If you have any questions about the code presented previously, you should visit the reference links that explain what each function does. Apart from the function, the only more complex piece of code is the <b class="w3-text-blue">for statement</b>. This statement is used when you intend to cycle a fixed amount of times and you need to know which iteration you're currently at. A translation of the for statement is as follows:</p>
+		<div class="w3-codespan w3-text-gray">
+		<span class="w3-text-blue">for</span> (i=0 &lt;start by setting a value to a variable&gt;; <br>i&lt;10 &lt;keep running the code after the for statement until this condition is false&gt;; <br> i=i+1 &lt;at the end of each iteration, execute this block of code&gt;) <br>{&lt;the block of code to execute at each iteration. The variable initialized will hold the value of the current iteration (in this case, the variable i)&gt;}
+		</div>
+		<p>And that's it! Our item is finally complete! You can now test your item by pressing the <b class="w3-text-blue">Play Button</b>. It will load the game in a special room where you can test your mods at ease. Pressing the <b class="w3-text-blue">F2 key</b> will allow you to spawn the items of your module. Next, we'll learn how to publish your module!<p>
+    </div>
+  </div>
+  
+  <div class="w3-row w3-padding-64">
+    <div class="w3-twothird w3-container">
+      <h1 class="w3-text-teal">Publishing the Module</h1>
+      <p><b class="w3-text-purple">Dungeon Souls</b> allows the addition of modules that are external to Steam Workshop. If you intend to publish your project to Steam, please visit the <a href="./help_steam_workshop.html" class="w3-hover-text-light-blue">Steam Workshop</a> documentation page for more information. The upside of having the <b class="w3-text-purple">Dungeon Souls</b> on Steam is that the game automatically adds the subscribed modules.</p> 
+	  <p>In order to add the module to the game without the help of Steam, we need to do the following steps:</p>
+	  <ol>
+	  <li>Compile and build the module by selecting <i class="w3-text-green">Compile>Compile Module for Release (CTRL+R)</i>.</li>
+	  <li>Extract the .zip onto a folder (<i class="w3-text-gray">name the folder the same name as the module, like, for example, </i><b class="w3-text-light-blue">XPTO</b>)</li>
+	  <li>Locate the game's save folder.</li>
+	  <i class="w3-text-gray"><ul>
+	  <li>On Windows, it's %localappdata%/DungeonSouls. Typing this on the file explorer's search bar will take you to the directory</li>
+	  <li>On Ubuntu (Linux), it's /home/&lt;username&gt;/.config/DungeonSouls</li>
+	  <li>On Mac OS, it's usually  ~/Library/Application Support/DungeonSouls</li>
+	  </ul></i>
+	  <li>Create a folder and name it <b class="w3-text-blue">Mods</b>.</li>
+	  <li>Inside the <b class="w3-text-blue">Mods</b> folder, create a file called <b class="w3-text-blue">mods_location.config</b>.</li>
+	  <li>Copy the contents of the extracted module onto the <b class="w3-text-blue">Mods</b> folder</li>
+	  <li>Add an entry to the <b class="w3-text-blue">mods_location.config</b> file containing the <b class="w3-text-blue">relative path</b> to the module file (<b class="w3-text-purple">dsa</b>). For example, if we've added a folder named <b class="w3-text-light-blue">XPTO</b> with a module file inside called <b class="w3-text-light-blue">XPTO.dsa</b>, the entry would be <b class="w3-text-light-green">XPTO/XPTO.dsa</b></li>
+	  </ol>
+	  <p>To share your module outside of Steam Workshop, you'll have to distribute the Zip file yourself.</p>
+	  <p>... And that's it! This completes the tutorial on <b class="w3-text-teal">How to Create Your First Module</b>! Checking out the rest of the documentation, as well as the <a href="./help_onboarding.html" class="w3-hover-text-light-blue">Quick Onboarding</a> is strongly recommended! We hope you have fun creating modules for the game and feel free to contact us at any time!</p>
     </div>
   </div>
 

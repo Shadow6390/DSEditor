@@ -195,7 +195,7 @@ public class CreateItemUI extends javax.swing.JDialog
             }
         });
 
-        jLabel6.setText("onItemActivatedFunction (optional):");
+        jLabel6.setText("onItemActivated Function (optional):");
 
         onActiveField.addActionListener(new java.awt.event.ActionListener()
         {

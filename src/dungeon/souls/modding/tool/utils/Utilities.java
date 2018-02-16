@@ -154,9 +154,10 @@ public final class Utilities
      * @param stream The input stream of the resource.
      * @param name The name of the file.
      * @param replace Replace if the extracted file is already present.
+     * @return The extracted file.
      * @throws java.io.IOException
      */
-    public static void extractPackagedFiled(File folder,InputStream stream,String name,boolean replace) throws IOException
+    public static File extractPackagedFile(File folder,InputStream stream,String name,boolean replace) throws IOException
     {
         if (!folder.exists())
         {
@@ -172,7 +173,9 @@ public final class Utilities
                 fos.write(data.getBytes());
                 fos.close();
             }
+            return temp;
         }
+        return null;
     }
     
     /**

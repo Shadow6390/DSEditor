@@ -237,7 +237,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel6">
       <Properties>
-        <Property name="text" type="java.lang.String" value="onItemActivatedFunction (optional):"/>
+        <Property name="text" type="java.lang.String" value="onItemActivated Function (optional):"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="onActiveField">

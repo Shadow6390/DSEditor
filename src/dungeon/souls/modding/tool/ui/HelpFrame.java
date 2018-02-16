@@ -5,9 +5,18 @@
  */
 package dungeon.souls.modding.tool.ui;
 
+import dungeon.souls.modding.tool.model.generic.EditorConfig;
 import dungeon.souls.modding.tool.utils.Utilities;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
@@ -37,19 +46,53 @@ public class HelpFrame extends javax.swing.JFrame
         });
     }
 
+    /**
+     * Initializes the pages.
+     */
     private void initPages()
     {
         try
         {
             File baseDir = new File("Help");
             String[] fileNames = {"help.html","help_functions.html","help_modules.html","help_steam_workshop.html",
-            "help_sprites.html","help_items.html","help_contact.html","help_loggerWrite.html","help_onboarding.html",
-            "help_playerAttribute.html","help_playerAttribute.html","help_distanceToNearestEnemy.html","help_enemyCount.html",
-            "help_addGold.html","help_printConsole.html"};
-            for (String element:fileNames)
+            "help_sprites.html","help_items.html","help_contact.html","help_onboarding.html"};
+            List<String> functions = getNativeFunctions();
+            List<String> names = new LinkedList<>();
+            
+            EditorConfig config = EditorConfig.getInstance();
+            boolean replace = config.getDocumentationVersion()<EditorConfig.DOCUMENTATION_VERSION;
+            if (replace)
             {
-                Utilities.extractPackagedFiled(baseDir, 
-                        EditorMain.class.getClassLoader().getResourceAsStream("dungeon/souls/modding/tool/resources/"+element), element, false);
+                config.setDocumentationVersion(EditorConfig.DOCUMENTATION_VERSION);
+            }
+            String functionLinkCode = ""; //The code to replace the links to the functions.
+            names.addAll(Arrays.asList(fileNames));
+            String temp,linkTemp;
+            Collections.sort(functions);
+            for (String elem:functions)
+            {
+                temp=elem.replaceAll("\\(.*\\)", "");
+                linkTemp = "help_"+temp+".html";
+                names.add(linkTemp);
+                functionLinkCode+="<a class=\"w3-bar-item w3-button w3-hover-black\" href=\"./"+linkTemp+"\">"+temp+"</a>\n";
+            }
+            
+            if (replace)
+            {
+                for (String element:names)
+                {
+                    InputStream stream = EditorMain.class.getClassLoader().getResourceAsStream("dungeon/souls/modding/tool/resources/"+element);
+                    if (stream!=null)
+                    {
+                        File extract = Utilities.extractPackagedFile(baseDir, 
+                                stream, element, replace);
+                        String source = Utilities.fileAsString(extract);
+                        source=source.replace("<!--!!FUNCTION_LINKS!!-->",functionLinkCode);
+                        FileOutputStream fos = new FileOutputStream(extract);
+                        fos.write(source.getBytes());
+                        fos.close();
+                    }
+                }
             }
             
         }
@@ -57,6 +100,28 @@ public class HelpFrame extends javax.swing.JFrame
         {
             e.printStackTrace();
         }
+    }
+    
+    /**
+     * Fetches the native functions of the editor.
+     * @return 
+     */
+    private List<String> getNativeFunctions()
+    {
+        List<String> result = new LinkedList<>();
+        try
+        {
+            String data = Utilities.inputStreamAsString(EditorMain.class.getClassLoader().getResourceAsStream("dungeon/souls/modding/tool/resources/DungeonSoulsGameFunctions.txt"));
+            for (String line:data.split("\n"))
+            {
+                result.add(line);
+            }
+        }
+        catch (IOException ex)
+        {
+            Logger.getLogger(JCodePane.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return result;
     }
     
     /**

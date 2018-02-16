@@ -40,13 +40,7 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
     <i class="fa fa-remove"></i>
   </a>
   <h4 class="w3-bar-item"><b>Reference</b></h4>
-  <a class="w3-bar-item w3-button w3-hover-black" href="./help_addGold.html">addGold</a>
-  <a class="w3-bar-item w3-button w3-hover-black" href="./help_distanceToNearestEnemy.html">distanceToNearestEnemy</a>
-  <a class="w3-bar-item w3-button w3-hover-black" href="./help_enemyCount.html">enemyCount</a>
-  <a class="w3-bar-item w3-button w3-hover-black" href="./help_playerAttribute.html">getPlayerAttribute</a>
-  <a class="w3-bar-item w3-button w3-hover-black" href="./help_loggerWrite.html">loggerWrite</a>
-  <a class="w3-bar-item w3-button w3-hover-black" href="./help_printConsole.html">printConsole</a>
-  <a class="w3-bar-item w3-button w3-hover-black" href="./help_playerAttribute.html">setPlayerAttribute</a>
+  <!--!!FUNCTION_LINKS!!-->
 </nav>
 
 <!-- Overlay effect when opening sidebar on small screens -->
@@ -151,7 +145,13 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
 			<td>Else If Statement</td> <td>if (condition) { ... } else if (conditionB) {...}</td> <td>If a preceed <b class="w3-text-blue">if</b> fails, another condition is checked. If the condition is true, the corresponding block of code is executed.</td>
 		</tr>
 		<tr>
-			<td>Else Statement </td> <td>if (condition) {...} else {...}</td> <td>If the preceeding <b class="w3-text-blue">if</b> fails, the block of code that follows <b class="w3-text-blue">else</b> is executed. Effectively the same as performing the following statement: <b class="w3-text-blue">if (condition!=1)</b> </td>
+			<td>Else Statement </td> <td>if (condition) {...} else {...}</td> <td>If the preceeding <b class="w3-text-blue">if</b> fails, the block of code that follows <b class="w3-text-blue">else</b> is executed. Effectively the same as performing the following statement: <b class="w3-text-blue">if (condition!=1)</b>.</td>
+		</tr>
+		<tr>
+			<td>While Statement </td> <td>while (condition) {...}</td> <td>Executes the code that is located after the condition, as long as the <b class="w3-text-blue">conditional test</b> is <b class="w3-text-light-blue">true</b>.</td>
+		</tr>
+		<tr>
+			<td>For Statement </td> <td>for (assignment;condition;codeBlock) {...}</td> <td>Executes the code that is located after the statement, as long as the <b class="w3-text-blue">conditional test</b> is <b class="w3-text-light-blue">true</b>. At the start of the cycle, an <b class="w3-text-blue">assignment</b> statement is executed, if it exists. At the end of each iteration, the code contained in <b class="w3-text-blue">codeBlock</b> is executed.</td>
 		</tr>
 		</tbody>
 		</table>
@@ -161,16 +161,16 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
   
   <div class="w3-row w3-padding-64">
     <div class="w3-twothird w3-container">
-      <h1 class="w3-text-teal">Conditional Operators</h1>
-      <p><b class="w3-text-blue">DSML</b> supports the following <b class="w3-text-blue">conditional operators</b>:</p>
+      <h1 class="w3-text-teal">Comparison Operators</h1>
+      <p><b class="w3-text-blue">DSML</b> supports the following <b class="w3-text-blue">comparison operators</b>:</p>
 	  <table class="w3-table w3-striped w3-hoverable w3-responsive">
 		<tbody>
 		<tr>
 		<th class="w3-teal">
-			Conditional Name
+			Comparison Name
 		</th>
 		<th class="w3-teal">
-			Conditional Symbol
+			Comparison Symbol
 		</th>
 		<th class="w3-teal">
 			Description
@@ -193,6 +193,59 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
 		</tr>
 		<tr>
 			<td>Less Than Or Equal</td> <td>&lt;=</td> <td>In the comparison expression <b class="w3-text-light-blue">a&lt;=b</b>, condition is true if a is less than or equal to b.</td>
+		</tr>
+		</tbody>
+		</table>
+    </div>
+  </div>
+  
+  <div class="w3-row w3-padding-64">
+    <div class="w3-twothird w3-container">
+      <h1 class="w3-text-teal">Conditional Operators</h1>
+      <p><b class="w3-text-blue">DSML</b> supports the following <b class="w3-text-blue">conditional operators</b>:</p>
+	  <table class="w3-table w3-striped w3-hoverable w3-responsive">
+		<tbody>
+		<tr>
+		<th class="w3-teal">
+			Conditional Name
+		</th>
+		<th class="w3-teal">
+			Conditional Symbol
+		</th>
+		<th class="w3-teal">
+			Description
+		</th>
+		</tr>
+		<tr>
+			<td>And</td> <td>&&</td> <td>In the condition expression <b class="w3-text-light-blue">a && b</b>, condition is true if both a and b are true.</td>
+		</tr>
+		<tr>
+			<td>Or</td> <td>||</td> <td>In the condition expression <b class="w3-text-light-blue">a || b</b>, condition is true if either a or b is true.</td>
+		</tr>
+		</tbody>
+		</table>
+    </div>
+  </div>
+  
+  <div class="w3-row w3-padding-64">
+    <div class="w3-twothird w3-container">
+      <h1 class="w3-text-teal">Special Characters</h1>
+      <p><b class="w3-text-blue">DSML</b> supports the following <b class="w3-text-blue">special characters</b>:</p>
+	  <table class="w3-table w3-striped w3-hoverable w3-responsive">
+		<tbody>
+		<tr>
+		<th class="w3-teal">
+			Special Character Name
+		</th>
+		<th class="w3-teal">
+			Special Character Symbol
+		</th>
+		<th class="w3-teal">
+			Description
+		</th>
+		</tr>
+		<tr>
+			<td>New Line</td> <td>#</td> <td>Represents a new line of text. The operator is equivalent to the <b class="w3-text-blue">\n</b> special character of languages like Java and C.<br><b>Note:</b> The character choice has to do with Dungeon Souls' base engine (Game Maker Studio 1.4).</td>
 		</tr>
 		</tbody>
 		</table>

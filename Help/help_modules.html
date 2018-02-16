@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<title>Dungeon Souls Modding - Documentation</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-black.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
+.w3-sidebar {
+  z-index: 3;
+  width: 250px;
+  top: 43px;
+  bottom: 0;
+  height: inherit;
+}
+</style>
+<body>
+
+<!-- Navbar -->
+<div class="w3-top">
+  <div class="w3-bar w3-theme w3-top w3-left-align w3-large">
+    <a class="w3-bar-item w3-button w3-right w3-hide-large w3-hover-white w3-large w3-theme-l1" href="javascript:void(0)" onclick="w3_open()"><i class="fa fa-bars"></i></a>
+    <a href="./help.html" class="w3-bar-item w3-button w3-theme-l1">Dungeon Souls Editor</a>
+	<a href="./help_onboarding.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Quick Onboarding</a>
+    <a href="#" class="w3-bar-item w3-button w3-hide-small w3-hover-white w3-text-cyan">Modules</a>
+    <a href="./help_items.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Items</a>
+	<a href="./help_sprites.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Sprites</a>
+	<a href="./help_functions.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Functions</a>
+	<a href="./help_steam_workshop.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Steam Workshop</a>
+    <a href="./help_contact.html" class="w3-bar-item w3-button w3-hide-small w3-hover-white">Contact</a>
+  </div>
+</div>
+
+<!-- Sidebar -->
+<nav class="w3-sidebar w3-bar-block w3-collapse w3-large w3-theme-l5 w3-animate-left" id="mySidebar">
+  <a href="javascript:void(0)" onclick="w3_close()" class="w3-right w3-xlarge w3-padding-large w3-hover-black w3-hide-large" title="Close Menu">
+    <i class="fa fa-remove"></i>
+  </a>
+  <h4 class="w3-bar-item"><b>Reference</b></h4>
+  <a class="w3-bar-item w3-button w3-hover-black" href="./help_abs.html">abs</a>
+<a class="w3-bar-item w3-button w3-hover-black" href="./help_addGold.html">addGold</a>
+<a class="w3-bar-item w3-button w3-hover-black" href="./help_arctan2.html">arctan2</a>
+<a class="w3-bar-item w3-button w3-hover-black" href="./help_ceil.html">ceil</a>
+<a class="w3-bar-item w3-button w3-hover-black" href="./help_cos.html">cos</a>
+<a class="w3-bar-item w3-button w3-hover-black" href="./help_createParticleEffect.html">createParticleEffect</a>
+<a class="w3-bar-item w3-button w3-hover-black" href="./help_createPlayerProjectilePercentage.html">createPlayerProjectilePercentage</a>
+<a class="w3-bar-item w3-button w3-hover-black" href="./help_degToRad.html">degToRad</a>
+<a class="w3-bar-item w3-button w3-hover-black" href="./help_distanceToNearestEnemy.html">distanceToNearestEnemy</a>
+<a class="w3-bar-item w3-button w3-hover-black" href="./help_enemiesInRadius.html">enemiesInRadius</a>
+<a class="w3-bar-item w3-button w3-hover-black" href="./help_enemyCount.html">enemyCount</a>
+<a class="w3-bar-item w3-button w3-hover-black" href="./help_enemyKill.html">enemyKill</a>
+<a class="w3-bar-item w3-button w3-hover-black" href="./help_enemySuicide.html">enemySuicide</a>
+<a class="w3-bar-item w3-button w3-hover-black" href="./help_floor.html">floor</a>
+<a class="w3-bar-item w3-button w3-hover-black" href="./help_getGameTicksPerSecond.html">getGameTicksPerSecond</a>
+<a class="w3-bar-item w3-button w3-hover-black" href="./help_getPlayerAttribute.html">getPlayerAttribute</a>
+<a class="w3-bar-item w3-button w3-hover-black" href="./help_irandom.html">irandom</a>
+<a class="w3-bar-item w3-button w3-hover-black" href="./help_irandomRange.html">irandomRange</a>
+<a class="w3-bar-item w3-button w3-hover-black" href="./help_listAdd.html">listAdd</a>
+<a class="w3-bar-item w3-button w3-hover-black" href="./help_listCreate.html">listCreate</a>
+<a class="w3-bar-item w3-button w3-hover-black" href="./help_listDestroy.html">listDestroy</a>
+<a class="w3-bar-item w3-button w3-hover-black" href="./help_listGet.html">listGet</a>
+<a class="w3-bar-item w3-button w3-hover-black" href="./help_listSize.html">listSize</a>
+<a class="w3-bar-item w3-button w3-hover-black" href="./help_loggerWrite.html">loggerWrite</a>
+<a class="w3-bar-item w3-button w3-hover-black" href="./help_pointDirection.html">pointDirection</a>
+<a class="w3-bar-item w3-button w3-hover-black" href="./help_printConsole.html">printConsole</a>
+<a class="w3-bar-item w3-button w3-hover-black" href="./help_random.html">random</a>
+<a class="w3-bar-item w3-button w3-hover-black" href="./help_randomRange.html">randomRange</a>
+<a class="w3-bar-item w3-button w3-hover-black" href="./help_round.html">round</a>
+<a class="w3-bar-item w3-button w3-hover-black" href="./help_setPlayerAttribute.html">setPlayerAttribute</a>
+<a class="w3-bar-item w3-button w3-hover-black" href="./help_sin.html">sin</a>
+<a class="w3-bar-item w3-button w3-hover-black" href="./help_sqrt.html">sqrt</a>
+<a class="w3-bar-item w3-button w3-hover-black" href="./help_tan.html">tan</a>
+
+</nav>
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- Main content: shift it to the right by 250 pixels when the sidebar is visible -->
+<div class="w3-main" style="margin-left:250px">
+
+  <div class="w3-row w3-padding-64">
+    <div class="w3-container">
+      <h1 class="w3-text-teal">Module Documentation</h1>
+      <p>A <b class="w3-text-blue">module</b> represents the modding project inside Dungeon Souls. It is the base definition and all modules must have this definition in order for items, sprites and other definitions to be loaded properly. Only one <b class="w3-text-blue">module</b> can be defined per project. If multiple module definitions are found, a compilation error is produced.</p> 
+	  
+		<h2 class = "w3-text-teal">Game Variables</h2>
+		<p>A module definition contains the following <b class="w3-text-orange">Game Variables</b>:
+		<table class="w3-table w3-striped w3-hoverable w3-responsive">
+		<tbody>
+		<tr>
+		<th class="w3-teal">
+			Name
+		</th>
+		<th class="w3-teal">
+			Description
+		</th>
+		<th class="w3-teal">
+			Required
+		</th>
+		</tr>
+		<tr>
+			<td>NAME</td> <td>The name of the module shown in-game.</td> <td>True</td>
+		</tr>
+		<tr>
+			<td>VERSION</td> <td>The version of the module shown in-game. This version, although not verified for correct ordering, should be used to provide information to the player in regards to the latest version of your module. This way, players can know if they have the most recent module or not.</td> <td>True</td>
+		</tr>
+		<tr>
+			<td>DESCRIPTION</td> <td>The description of the module shown in-game.</td> <td>False</td>
+		</tr>
+		<tr>
+			<td>SPRITE_DIR</td> <td>The directory where the sprites will be stored in. Dungeon Souls will try to access this directory when loading sprite definitions. Path is <b>relative</b>.</td> <td>False</td>
+		</tr>
+		</tbody>
+		</table>
+	  
+	  <h2 class = "w3-text-teal">Location and Extension</h2>
+	  <p>The <b class="w3-text-blue">module</b> code is stored in the <b class="w3-text-blue">Dungeon Souls Module (.dsmod)</b> file.</p>
+	  
+	  <h2 class = "w3-text-teal">Example</h2>
+	  <p>Here follows an example of the definition of a <b class="w3-text-blue">module</b>:</p>
+	  <div class="w3-code"><span class="w3-text-blue">define module </span>test<br>
+        {<br>
+		<span class="w3-text-purple">[NAME]</span>=<span class="w3-text-orange">"MyModule"</span>;<br>
+		<span class="w3-text-purple">[VERSION]</span>=<span class="w3-text-orange">"1.0.0"</span>;<br>
+		<span class="w3-text-purple">[DESCRIPTION]</span>=<span class="w3-text-orange">"My first module for Dungeon Souls!"</span>;<br>
+		<span class="w3-text-purple">[SPRITE_DIR]</span>=<span class="w3-text-orange">"Sprites"</span>;<br>
+		<br>
+		<i class="w3-text-gray">#Place code here...</i><br>
+        }</div>
+    </div>
+  </div>
+
+  <footer id="myFooter">
+    <div class="w3-container w3-theme-l2 w3-padding-32">
+      <h4>Dungeon Souls Modding Documentation</h4>
+    </div>
+
+    <div class="w3-container w3-theme-l1">
+      <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a></p>
+    </div>
+  </footer>
+
+<!-- END MAIN -->
+</div>
+
+<script>
+// Get the Sidebar
+var mySidebar = document.getElementById("mySidebar");
+
+// Get the DIV with overlay effect
+var overlayBg = document.getElementById("myOverlay");
+
+// Toggle between showing and hiding the sidebar, and add overlay effect
+function w3_open() {
+    if (mySidebar.style.display === 'block') {
+        mySidebar.style.display = 'none';
+        overlayBg.style.display = "none";
+    } else {
+        mySidebar.style.display = 'block';
+        overlayBg.style.display = "block";
+    }
+}
+
+// Close the sidebar with the close button
+function w3_close() {
+    mySidebar.style.display = "none";
+    overlayBg.style.display = "none";
+}
+</script>
+
+</body>
+</html>
